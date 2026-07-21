@@ -1,0 +1,114 @@
+\documentclass[12pt,letterpaper]{article}
+
+% ---------- Page geometry ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+
+% ---------- Appendix ----------
+\usepackage{titlesec}
+
+% ---------- Encoding ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% ---------- Mathematics ----------
+\usepackage{amsmath,amssymb}
+\numberwithin{equation}{section}
+\usepackage{siunitx}      % Units (Hz, dB, ms)
+
+% ---------- Graphics ----------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta}
+
+% ---------- Tables ----------
+\usepackage{booktabs}
+
+% ---------- Hyperlinks ----------
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Citations ----------
+\usepackage{cite}
+
+% --------- AI Prompts Referencing ----------
+\usepackage{cleveref}
+
+% --------- Code Listing -------------
+\input{listing_style.tex}
+
+% Custom counter for AI prompts, independent of any other enumerate lists
+\newcounter{promptcounter}
+\renewcommand{\thepromptcounter}{\arabic{promptcounter}}
+
+% \newcommand\promptitem{label}{prompt text}
+\newcommand{\promptitem}[2]{%
+    \refstepcounter{promptcounter}%
+    \noindent\textbf{Prompt \thepromptcounter.} #2%
+    \label{#1}%
+    \par\vspace{0.5em}%
+}
+
+% Tell cleveref what to call this counter when referenced
+\crefname{promptcounter}{Prompt}{Prompts}
+\Crefname{promptcounter}{Prompt}{Prompts}
+
+\crefformat{promptcounter}{\textit{Prompt~#2#1#3}}
+\Crefformat{promptcounter}{\textit{Prompt~#2#1#3}}
+
+% ----------- Title Page ------------
+
+% \title{Title of Your Report}
+% \author{Your Name}
+% \date{\today}
+
+\begin{document}
+
+% ==================================================================
+
+% \maketitle    TODO: Uncomment after making the cover page
+
+% \tableofcontents  TODO: Uncomment Table of Contents after finishing
+
+% \chapter{Introduction}
+% \input{chapters/introduction}
+
+\section{Discussion}
+\input{discussion/audio_effects.tex}
+
+% \chapter{Results}
+% \input{chapters/results}
+
+% \chapter{Conclusion}
+% \input{chapters/conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{generative_ai, libraries, discussion/eq_filter/eq_filter}
+
+\clearpage
+
+\appendix
+\crefname{section}{Appendix}{Appendices}
+\Crefname{section}{Appendix}{Appendices}
+
+\titleformat{\section}
+    {\normalfont\Large\bfseries}
+    {Appendix \thesection:}
+    {0.5em}
+    {}
+
+\renewcommand{\thepage}{\thesection-\arabic{page}}
+
+\clearpage
+\setcounter{page}{1}
+\include{appendices/biquad_equations.tex}
+
+\clearpage
+\setcounter{page}{1}
+\include{appendices/00_ai_prompts.tex}
+
+
+
+\end{document}

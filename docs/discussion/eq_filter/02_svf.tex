@@ -1,0 +1,102 @@
+\subsubsection{State Variable Filter (SVF)}
+% TODO: After creating a section on Synthesizer Tools, please move this subsubsection out
+
+Unlike the biQuad filter, the State Variable Filter (SVF) does not require recalculation of coefficients, which can
+produce 
+Even though biquads create a wide variety of filter shapes, the coefficients need to be recalculated every time the 
+cutoff frequency or resonance is changed. Rapid changes to these coefficients, however, can introduce unnecessary 
+artifacts (i.e., clicks and glitches in audio) in real-time \cite{anthropicclaude}.
+
+Most synthesizer filters are equipped with continuous parameter modulation and resonant sound design to add a distinct 
+timbre for the synth, depending on how the producer would want it to sound like. Therefore, 
+\textbf{State Variable Filter (SVF)} was selected as an alternative approach \cite{anthropicclaude}. According to 
+Wishnick, the main reason for SVF being a suitable model is due to its time-varying stability, artifact-free 
+parameter interpolation, and ability to generate multiple filter responses \cite{Wishnick14}.  The SVF still 
+processes low-pass, band-pass and high-pass outputs and allows intuitive control over cutoff frequency and 
+resonance.
+
+% TODO: Add inline reference to the AI prompts
+Figure \ref{fig:biquad_circuit} below shows the analog circuit of the State Variable Filter. The adder/subtractor
+adds all the outputs from the input and the two integrators (op-amps with capacitors) in front of it \cite{elliott2012statevariable}. 
+These three components processes the input, where the adder, the first integrator, and the second integrator 
+outputs the HPF, BPF, and LPF response respectively. The resistors control the parameters, $Q$ and $f_s$.
+
+\input{discussion/eq_filter/figures/biquad_circuit.tex}
+
+Since the project is software-driven, it is possible to create an algorithm which simulates this system.
+Digital signals are based on discrete floating-point samples, so the integration can be done numerically. The 
+block diagram in Figure \ref{fig:svf_block_diagram} simplifies how the algorithm must be designed.
+
+\input{discussion/eq_filter/figures/svf_block_diagram.tex}
+
+It was initially experimented using Chamberlin's method to study how the state changes \cite{algorithm_chamberlin_svf},
+but it uses Euler's method, which provide less accurate approximation for continuous time integration compared to 
+Trapezoidal rule \cite{spiteri_chap3}. It even introduces delay of one sample caused by a feedback loop, which is
+unreliable.
+
+The following equation (\ref{eq:trapezoidal_integrator}) describe the Trapezoidal Integrator below:
+
+% Trapezoidal integrator with equation number and label for reference
+\begin{equation}\label{eq:trapezoidal_integrator}
+y\left[n\right] = y \left[n-1\right]+\frac{T}{2}\bigl(x\left[n\right]+x\left[n-1\right]\bigr)
+\end{equation}
+
+The Bilinear transform prewarps this trapezoidal integrator \cite{vafilterdesign2021}, resulting in a 
+topology-preserving transform (TPT) implementation. This maintains the behaviour of the analog filter structure
+while operating in the digital domain.
+
+To implement this system, Zavalshin's method is used to implement zero-delay feedback TPT SVF \cite{vafilterdesign2021,synthengineer_zdf_filters}. 
+Unlike the Chamberlin's method where feedback occurs after a delay of one sample, the formulation solves the feedback loop algebraically for
+each sample calculation.
+
+First, the program computes the filter responses for high-pass filter (\ref{eq:zdfsvf_hp}) using the following equation: 
+ \cite{vafilterdesign2021}:
+
+\begin{equation}\label{eq:zdfsvf_hp}
+    y_{hp} = \frac{x - (2R + g)s_1 - s_2}{1 + 2Rg + g^2}
+\end{equation}
+
+Where $R = \frac{1}{2Q}$ controls the damping/resonance behaviour using $Q$, $g$ is the coefficient derived from the bilinear transform,
+
+\begin{equation}\label{eq:zdfsvf_g}
+    g = \tan{\frac{\pi f_c}{f_s}}
+\end{equation}
+
+and $s_1$ and $s_2$ refer to the integrator states that store the previous state of 
+the two trapezoidal integrators.
+
+After computing the HPF response, the filter response for both band-pass
+(\ref{eq:zdfsvf_bp}), and low-pass filters (\ref{eq:zdfsvf_lp}) are determined by the following equation.
+
+\begin{equation}\label{eq:zdfsvf_bp}
+    y_{bp} = g \cdot y_{hp} + s_1
+\end{equation}
+
+\begin{equation}\label{eq:zdfsvf_lp}
+    y_{lp} = g \cdot y_{bp} + s_2
+\end{equation}
+
+% TODO: Please create an appendix for codes and add your implementation
+Finally, the internal states are then updated for the next sample. The process repeats after feeding each and every output
+to the system. The implementation of the code is included in listing ??.
+
+After successful test cases using C++ Catch2, a sanity check is performed by sending a sine wave input at various range
+of frequencies to the system. To create a Bode plot, the RMS (root-mean-squared) is calculated for both the input and output 
+signal using the following equation:
+
+\begin{equation}\label{eq:rms}
+    \mathrm{RMS}=\sqrt{\frac{1}{N}\sum_{n=0}^{N-1}x[n]^2}
+\end{equation}
+
+Where $x[n]$ is the audio sample at index $n$, and $N$ is the number of samples processed.
+
+Then the gain is calculated for both using the following:
+\begin{equation}\label{eq:gain}
+    G_{dB}=20\log_{10}\left(\frac{\mathrm{RMS}_{out}}{\mathrm{RMS}_{in}}\right)
+\end{equation}
+
+Then the Bode plot is generated (Figure \ref{fig:svf_bode_plot}) using Python MatPlotLib, which yielded expected results. This shows evidence that 
+both the methodologies for the EQ Filter has the potential to cut off some range of frequencies during auditory testing.
+
+\input{discussion/eq_filter/figures/svf_bode_plot.tex}
+% TODO: Measure execution time and compare it with the BiQuad

@@ -1,0 +1,100 @@
+\begin{figure}[ht]
+    \centering
+\begin{tikzpicture}
+
+% Adder 1
+\node[draw,
+    circle,
+    minimum size=0.6cm,
+    fill=red!50
+] (sum1) at (0,0){$+$};
+
+% Dots
+\node[draw,
+    circle,
+    minimum size=0.2cm,
+    fill=black,
+    inner sep=0cm,
+    right=0.5cm of sum1
+] (hp_dot) {};
+
+% Integrator 1
+\node [draw,
+    fill=blue!20,
+    minimum width=2cm,
+    minimum height=1.2cm,
+    right=0.7cm of hp_dot
+]  (integrator1) {$\int (g, s_1)$};
+
+\node[draw,
+    circle,
+    minimum size=0.2cm,
+    fill=black,
+    inner sep=0cm,
+    right=0.5cm of integrator1
+] (bp_dot) {};
+
+% Integrator 2
+\node [draw,
+    fill=blue!20,
+    minimum width=2cm,
+    minimum height=1.2cm,
+    right=0.7cm of bp_dot
+]  (integrator2) {$\int (g, s_2)$};
+
+% LP Dot
+\node[draw,
+    circle,
+    minimum size=0.2cm,
+    fill=black,
+    inner sep=0cm,
+    right=1cm of integrator2
+] (lp_dot) {};
+
+
+% small downward triangle labeled 2R below integrator2
+\node[draw,
+    isosceles triangle,
+    shape border rotate=270,
+    minimum size=0.8cm,
+    fill=yellow!20,
+    below=1.2cm of bp_dot,
+    label={[yshift=-2mm]right:2R}
+] (scalar_R) {};
+
+% Adder 2
+\node[draw,
+    circle,
+    minimum size=0.6cm,
+    fill=red!50,
+    below=1.2cm of scalar_R,
+] (sum2) {$+$};
+
+% Connections
+% \draw[-{Stealth[length=3mm, width=2mm]}] ++(0, 3.5cm) -- (sum.west) node[right] {$y_{\mathrm{LP}}$};
+\draw[-{Stealth[length=3mm, width=2mm]}] (sum1) -- (integrator1);
+\draw[-{Stealth[length=3mm, width=2mm]}] (integrator1) -- (integrator2);
+\draw[-{Stealth[length=3mm, width=2mm]}] (bp_dot) -- (scalar_R);
+\draw[-{Stealth[length=3mm, width=2mm]}] (integrator2.east) -- ++(3cm,0) node[right] {$y_{\mathrm{LP}}\left[n\right]$};
+\draw[-{Stealth[length=3mm, width=2mm]}] (scalar_R) -- (sum2);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (sum2.west) -| (sum1.south) node[right, yshift=-3mm] {$-$};
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (lp_dot.south) |- (sum2.east);
+
+\draw[-{Stealth[length=3mm, width=2mm]}] ++(-2,0) node[above]{$x\left[n\right]$} -- (sum1.west);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (hp_dot.north) |- ++(1cm,2cm) node[right] {$y_{\mathrm{HP}}\left[n\right]$};
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (bp_dot.north) |- ++(1cm,2cm) node[right] {$y_{\mathrm{BP}}\left[n\right]$};
+
+
+
+\end{tikzpicture}
+
+\caption{TPT State Variable Filter Topology \cite{vafilterdesign2021,synthengineer_zdf_filters}}
+\label{fig:svf_block_diagram}
+\end{figure}

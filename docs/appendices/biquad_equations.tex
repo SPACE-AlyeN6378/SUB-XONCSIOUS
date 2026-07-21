@@ -1,0 +1,229 @@
+\section{Biquad Coefficient Equations}
+\label{app:biquad_equations}
+
+The following equations are extracted from Audio EQ Cookbook by Robert-Bristow Johnson,
+which are used to calculate the coefficients of the second-order infinite impulse response (IIR) biquad filter 
+(See \Cref{eq:biquad_transfer} for the transfer function). The Quality Factor ($Q$) is used to
+control resonance in the centre frequency ($f_s$) \cite{cookbook}. Please note that bandwidth ($BW$) is not used 
+in the implementation.
+
+\subsection{Common Variables}
+
+The following variables are used throughout the filter coefficient calculations:
+\begin{equation}\label{eq:bq_omega}
+    \omega_0 = \frac{2\pi f_0}{f_s}
+\end{equation}
+
+\begin{equation}
+    A = 10^{\frac{\mathrm{dB}_{\mathrm{gain}}}{40}}
+\end{equation}
+
+For filters that use the quality factor,
+\begin{equation}
+    \alpha = \frac{\sin(\omega_0)}{2Q}
+\end{equation}
+
+For shelving filters, the shelf slope parameter ($S$) is used:
+\begin{equation}
+    \alpha =
+\frac{\sin(\omega_0)}{2}
+\sqrt{\left(A+\frac{1}{A}\right)\left(\frac{1}{S}-1\right)+2}
+\end{equation}
+
+Where,
+\begin{itemize}
+    \item $f_0$ is the cutoff or centre frequency (Hz),
+    \item $f_s$ is the sampling frequency/sample rate (Hz),
+    \item $Q$ is the quality factor,
+    \item $A$ is the linear gain corresponding to the specified gain in decibels,
+    \item $S$ is the shelf slope parameter.
+\end{itemize}
+
+After computing the coefficients in the next sections, all filters are normalized by 
+dividing every coefficient by $a_0$:
+
+$$
+    b_0 \leftarrow \frac{b_0}{a_0},\qquad
+    b_1 \leftarrow \frac{b_1}{a_0},\qquad
+    b_2 \leftarrow \frac{b_2}{a_0}
+$$
+
+$$
+    a_1 \leftarrow \frac{a_1}{a_0}, \qquad
+    a_2 \leftarrow \frac{a_2}{a_0}
+$$
+
+Then the transfer function would look like this:
+\begin{equation}\label{eq:norm_biquad_transfer}
+    H(z) = \frac{\left(\frac{b_0}{a_0}\right) 
+    + \left(\frac{b_1}{a_0}\right) z^{-1} 
+    + \left(\frac{b_2}{a_0}\right) z^{-2}}
+    {1 + \left(\frac{a_1}{a_0}\right) z^{-1} 
+    + \left(\frac{a_2}{a_0}\right) z^{-2}}
+\end{equation}
+
+The normalized denominator coefficient becomes $a_0 = 1$, so that the program
+can only work with 5 coefficients instead of 6.
+
+\subsection{Low-Pass Filter}
+
+$$
+b_0=\frac{1-\cos\omega_0}{2},\qquad
+b_1=1-\cos\omega_0, \qquad
+b_2=\frac{1-\cos\omega_0}{2}
+$$
+
+$$
+a_0=1+\alpha,\qquad
+a_1=-2\cos\omega_0, \qquad
+a_2=1-\alpha
+$$
+
+% ../include/audio_fx/eq_filter/BiQuadFilter.cpp
+\lstinputlisting[
+    style=cppstyle,
+    firstline=4,
+    lastline=16,
+    caption={Biquad coefficient calculation for the Low-Pass Filter},
+    label={lst:biquad-lpf}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{High-Pass Filter}
+
+$$
+b_0=\frac{1+\cos\omega_0}{2}, \qquad
+b_1=-(1+\cos\omega_0), \qquad
+b_2=\frac{1+\cos\omega_0}{2}
+$$
+
+$$
+a_0=1+\alpha, \qquad
+a_1=-2\cos\omega_0, \qquad
+a_2=1-\alpha
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    firstline=19,
+    lastline=31,
+    caption={Biquad coefficient calculation for the High-Pass Filter},
+    label={lst:biquad-hpf}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{Band-Pass Filter}
+$$
+a_0=1+\alpha, \qquad  a_1=-2\cos\omega_0, \qquad, a_2=1-\alpha
+$$
+
+For Constant Peak Gain (\SI{0}{\decibel} peak gain), 
+$$
+b_0=\alpha, \qquad  b_1=0, \qquad, b_2=-\alpha
+$$
+
+For Constant Skirt Gain (Peak gain $= Q$), 
+$$
+b_0=Q\alpha, \qquad  b_1=0, \qquad, b_2=-Q\alpha
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    firstline=34,
+    lastline=56,
+    caption={Biquad coefficient calculation for the Band-Pass Filter},
+    label={lst:biquad-bpf}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{Notch Filter}
+$$
+b_0=1, \qquad  b_1=-2\cos\omega_0, \qquad  b_2=1
+$$
+
+$$
+a_0=1+\alpha  \qquad  a_1=-2\cos\omega_0  \qquad a_2=1-\alpha
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    firstline=59,
+    lastline=71,
+    caption={Biquad coefficient calculation for the Notch Filter},
+    label={lst:biquad-notch}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{Peaking Equalizer}
+$$
+b_0=1+\alpha A, \qquad b_1=-2\cos\omega_0, \qquad b_2=1-\alpha A
+$$
+
+$$
+a_0=1+\frac{\alpha}{A}, \qquad a_1=-2\cos\omega_0, \qquad a_2=1-\frac{\alpha}{A}
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    firstline=74,
+    lastline=87,
+    caption={Biquad coefficient calculation for the Peaking Equalizer},
+    label={lst:biquad-peak}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{Low-Shelf Filter}
+$$
+b_0=A\left[(A+1)-(A-1)\cos\omega_0+2\sqrt{A}\alpha\right], \qquad
+b_1=2A\left[(A-1)-(A+1)\cos\omega_0\right], \qquad
+$$
+
+$$
+b_2=A\left[(A+1)-(A-1)\cos\omega_0-2\sqrt{A}\alpha\right]
+$$
+
+$$
+a_0=(A+1)+(A-1)\cos\omega_0+2\sqrt{A}\alpha, \qquad a_1=-2\left[(A-1)+(A+1)\cos\omega_0\right]
+$$
+
+$$
+a_2=(A+1)+(A-1)\cos\omega_0-2\sqrt{A}\alpha
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={lowshelf-lowshelf},
+    caption={Biquad coefficient calculation for the Low-Shelf Filter},
+    label={lst:biquad-lowshelf}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{High-Shelf Filter}
+$$
+b_0=A\left[(A+1)+(A-1)\cos\omega_0+2\sqrt{A}\alpha\right], \qquad b_1=-2A\left[(A-1)+(A+1)\cos\omega_0\right]
+$$
+$$
+b_2=A\left[(A+1)+(A-1)\cos\omega_0-2\sqrt{A}\alpha\right]
+$$
+
+$$
+a_0=(A+1)-(A-1)\cos\omega_0+2\sqrt{A}\alpha, \qquad a_1=2\left[(A-1)-(A+1)\cos\omega_0\right]
+$$
+$$
+a_2=(A+1)-(A-1)\cos\omega_0-2\sqrt{A}\alpha
+$$
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={highshelf-highshelf},
+    caption={Biquad coefficient calculation for the High-Shelf Filter},
+    label={lst:biquad-highshelf}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}
+
+\subsection{Audio Processing}
+These equations were used to compute the filter coefficients before normalization. These normalized 
+coefficients are subsequently used in the difference equation (\ref{eq:biquad_diff_eqn}) described in
+Section \ref{sec:eq_filter}. The listing below shows how the signal is processed using that difference
+equation.
+
+\lstinputlisting[
+    style=cppstyle,
+    firstline=143,
+    lastline=152,
+    caption={Recursive audio processing using the difference equation (\ref{eq:biquad_diff_eqn})},
+    label={lst:biquad-processing}
+]{../include/audio_fx/eq_filter/BiQuadFilter.cpp}

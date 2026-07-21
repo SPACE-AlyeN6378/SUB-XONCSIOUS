@@ -1,0 +1,12 @@
+"For parametric equalization, the RBJ biquad structure is appropriate 
+because EQ processing requires accurate realization of a defined second-order 
+transfer function with independent control of frequency, bandwidth, and gain. 
+The Audio EQ Cookbook provides coefficient equations for these common EQ responses, 
+making biquads an efficient and widely adopted solution for digital equalizers."
+
+"However, synthesizer filters have different requirements from equalizers. 
+Filter cutoff frequency and resonance are often continuously modulated by 
+low-frequency oscillators, envelopes, and performance controls. For these 
+time-varying applications, Wishnick proposes the State Variable Filter as a 
+suitable structure due to its time-varying stability, artifact-free parameter 
+interpolation, and ability to generate multiple filter responses."

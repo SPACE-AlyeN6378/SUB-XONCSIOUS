@@ -1,0 +1,40 @@
+\subsubsection{Equalizer (EQ) Filter Design}
+
+% TODO: This whole information needs to go to the Introduction section
+% The definitions needs to go to the glossary
+Every equalizers require a filtering mechanism which must be real-time friendly
+during the processing of each sample
+
+An EQ filter (Equalizer) is a tool that allows users to either add, attenuate, or eliminate
+a certain range of frequencies. They are commonly used in sound design, or surgical
+correction of the wave sounds to fit in with the other sounds in a track \cite{musicguymixing_2024}. The following
+list explains different types of EQ Filters serving different purposes:
+
+\begin{description}
+    \item[\textbf{Low-Pass Filter (LPF)}:] Restricts all the higher frequencies of the audio signal above the given cutoff frequency.
+    \item[\textbf{High-Pass Filter (HPF)}:] Restricts all the lower frequencies of the audio signal below the cutoff frequency.
+    \item[\textbf{Band-Pass Filter (BPF)}:] Allows frequencies within a certain range (i.e., close to cutoff frequency) to pass through while 
+    attenuating frequencies outside that range.
+    \item[\textbf{Notch Filter (Band-stop)}:] Blocks a certain range of frequencies, specifically near the cutoff frequency, while 
+    allowing other frequencies to pass outside the given range.
+    \item[\textbf{Peak Filter (Bell)}:] Used to amplify/boost a certain range of frequency, while the rest remains the same.
+    \item[\textbf{Shelf Filter}:] Amplifies a range of frequencies above or below the given cutoff frequency. \textbf{Low shelf} is for the frequencies below, 
+    and vice versa for the \textbf{High Shelf}.
+\end{description}
+
+According to FabFilter Pro-Q, these filters are controlled by the following parameters \cite{Whitehouse_2021}:
+\begin{itemize}
+    \item \textbf{Cutoff Frequency ($f_c$)}: Determines the threshold frequency at which the effect would take place
+    \item \textbf{`Q' (Quality Factor)}: Adjusts how wide the band affects the frequencies near the center (cutoff) frequency. 
+    A higher $Q$ will narrow down the range of frequencies being affected.
+    \item \textbf{Gain}: Although only applicable for Peak and Shelf, the gain adjusts how much the signals of certain frequencies are amplified, or reduced
+\end{itemize}
+
+The following two different methodologies are utilized to create these equalizers. They are the Robert Bristow-Johnson (RBJ) version and 
+the Zero-Delay Feedback State Variable Filter (SVF), and they both serve different purposes. They are also based on the analog circuit model 
+of the BiQuad Filter, which itself is a basic Infinite Impulse Response (IIR) model. This model is considered more beneficial compared to 
+Finite Impulse Response (FIR) model when it comes to latency and efficiency. Because for a given frequency response, they require fewer 
+delay elements, adders, and multipliers, thus requiring less computation power \cite{SteveWinder2002C1}.
+
+\input{discussion/eq_filter/02_svf}
+

@@ -1,0 +1,12 @@
+.vscode/
+build/
+docs/**/*.aux
+docs/**/*.bbl
+docs/**/*.blg
+docs/**/*.fdb_latexmk
+docs/**/*.fls
+docs/**/*.log
+docs/**/*.out
+docs/report.pdf
+docs/**/*.synctex.gz
+*.csv

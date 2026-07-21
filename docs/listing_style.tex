@@ -1,0 +1,47 @@
+\usepackage{listings}
+\usepackage{xcolor}
+
+% ---------- Color palette for syntax highlighting ----------
+\definecolor{codebg}{RGB}{247,247,247}
+\definecolor{codekeyword}{RGB}{0,90,160}
+\definecolor{codecomment}{RGB}{95,140,95}
+\definecolor{codestring}{RGB}{160,45,45}
+\definecolor{codenumber}{RGB}{130,90,0}
+\definecolor{linenum}{RGB}{150,150,150}
+
+% ---------- Shared base style ----------
+\lstdefinestyle{basecode}{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{codecomment}\itshape,
+    keywordstyle=\color{codekeyword}\bfseries,
+    stringstyle=\color{codestring},
+    numberstyle=\tiny\color{linenum},
+    numbers=left,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{black!20},
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=4,
+    captionpos=b,
+    showstringspaces=false,
+    xleftmargin=15pt,
+    framexleftmargin=15pt
+}
+
+% ---------- C++ style ----------
+\lstdefinestyle{cppstyle}{
+    style=basecode,
+    language=C++,
+    includerangemarker=false,
+    morekeywords={override, nullptr, constexpr, auto, class, struct,
+                  namespace, template, using, public, private, protected}
+}
+
+% ---------- Python style ----------
+\lstdefinestyle{pythonstyle}{
+    style=basecode,
+    language=Python,
+    morekeywords={self, async, await, yield, lambda}
+}

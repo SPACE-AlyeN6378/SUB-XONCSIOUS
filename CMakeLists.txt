@@ -42,7 +42,12 @@ target_include_directories(audio_engine
         ${PORTAUDIO_INCLUDE_DIRS}
 )
 
-target_link_libraries(audio_engine PUBLIC voice audio_player asound ${PORTAUDIO_LIBRARIES})
+target_link_libraries(audio_engine PUBLIC 
+    voice 
+    audio_player 
+    asound
+    reverb
+    ${PORTAUDIO_LIBRARIES})
 
 # -------------------------------------------------
 # BiQuad Filter library
@@ -56,6 +61,19 @@ target_include_directories(biquad PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(svf include/audio_fx/eq_filter/StateVariableFilter.cpp)
 target_include_directories(svf PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
+# -------------------------------------------------
+# Delay & Reverb library
+# -------------------------------------------------
+add_library(feedback_delay include/audio_fx/delay/FeedbackDelay.cpp)
+target_include_directories(feedback_delay PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+add_library(reverb include/audio_fx/reverb/Reverb.cpp)
+target_include_directories(reverb PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+
+# =================================================================================
+
+
 # Find the package
 find_package(Catch2 3 REQUIRED)
 
@@ -64,12 +82,12 @@ add_executable(SVFTest tests/SVFTest.cpp)
 add_executable(plot_data tests/FilterPlotData.cpp)
 add_executable(BiQuadTest tests/BiQuadTest.cpp)
 add_executable(AudioTest tests/AudioEngineTest.cpp)
-# add_executable(ClipTest tests/AudioClipTest.cpp)
+add_executable(ReverbTest tests/ReverbTest.cpp)
 
 # Link the required libraries to each executable
 target_link_libraries(SVFTest PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(plot_data PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(BiQuadTest PRIVATE oscillator biquad Catch2::Catch2WithMain)
+target_link_libraries(ReverbTest PRIVATE reverb Catch2::Catch2WithMain)
 target_link_libraries(AudioTest PRIVATE audio_engine)
-# target_link_libraries(ClipTest PRIVATE audio_player)
 

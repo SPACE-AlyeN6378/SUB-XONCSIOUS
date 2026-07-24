@@ -4,18 +4,24 @@
 #include <iostream>
 #include <alsa/asoundlib.h>
 #include "track/midi/MidiMap.h"
+#include <string>
 // #include <memory>
 
+const std::string WAV_DIR{"include/track/metronome/dry-wood-block.wav"};
+// const std::string WAV_DIR{"/home/space_alyen/Downloads/o95.wav"};
+
+// constexpr size_t delaySamples = 3200;
+constexpr float GAIN = 0.7;
 
 AudioEngine::AudioEngine()
     : sampleRate(44100.0), framesPerBuffer(256), sampleCounter(0),
-      player("/home/space_alyen/Downloads/alarm-5.wav", 44100)
+      player(WAV_DIR, 44100), reverb(300.0, 150.0, GAIN, 44100.0)
 {
 }
 
 AudioEngine::AudioEngine(double sr, unsigned long frames)
     : sampleRate(sr), framesPerBuffer(frames), sampleCounter(0),
-      player("/home/space_alyen/Downloads/alarm-5.wav", 44100)
+      player(WAV_DIR, 44100), reverb(300.0, 150.0, GAIN, 44100.0)
 {
 }
 
@@ -219,9 +225,9 @@ int AudioEngine::callback(
         float playerBuffer[2];
 
         state->player.generate(playerBuffer);
-        
-        out[i*2]     = playerBuffer[0];
-        out[i*2 + 1] = playerBuffer[1];
+        float mono_signal = state->reverb.process(playerBuffer[0]);
+        out[i*2]     = mono_signal;
+        out[i*2 + 1] = mono_signal;
     }
 
     // Finish measuring the time taken for this callback

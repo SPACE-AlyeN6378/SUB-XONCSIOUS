@@ -8,8 +8,11 @@
 #include "track/voice/Voice.hpp"
 #include "audio_source/AudioSource.hpp"
 #include "audio_source/audio_clip/AudioPlayer.hpp"
+#include "audio_fx/reverb/Reverb.hpp"
 #include <cstdint>
 
+
+constexpr std::size_t MAX_DELAY = 48000;
 
 struct AudioCallbackStats
 {
@@ -142,6 +145,8 @@ private:
     bool initialized{false};
 
     AudioPlayer player;
+    AudioFX::Reverb<8> reverb;
+    // FeedbackDelay<MAX_DELAY> fdR;
 
     PaStream* stream{nullptr};
 

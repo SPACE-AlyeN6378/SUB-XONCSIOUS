@@ -1,0 +1,162 @@
+\usetikzlibrary{calc}
+\begin{figure}[ht]
+    \centering
+\begin{tikzpicture}
+
+% Delay 1
+\node[draw,
+    fill=yellow!20,
+    minimum width=4cm,
+    minimum height=0.8cm,
+] (delay1) at (0,0){$z^{-M_1}$};
+
+\draw[-{Stealth[length=3mm]}] ([xshift=-5cm,yshift=0]delay1.west) -- (delay1.west);
+\draw[-{Stealth[length=3mm]}] (delay1.east) -- ([xshift=4cm,yshift=0]delay1.east);
+
+% Delay 2
+\node[draw,
+    fill=yellow!20,
+    minimum width=4cm,
+    minimum height=0.8cm,
+    below=0.6cm of delay1
+] (delay2) {$z^{-M_2}$};
+
+\draw[-{Stealth[length=3mm]}] ([xshift=-5cm,yshift=0]delay2.west) -- (delay2.west);
+\draw[-{Stealth[length=3mm]}] (delay2.east) -- ([xshift=4cm,yshift=0]delay2.east);
+
+% Vertical Dots
+\node[below=0cm of delay2] (box_dots1) {$\vdots$};
+\node[below left=0cm and 1.9cm of delay2] (box_dots2) {$\vdots$};
+\node[below right=0cm and 1.9cm of delay2] (box_dots3) {$\vdots$};
+
+
+% Delay N
+\node[draw,
+    fill=yellow!20,
+    minimum width=4cm,
+    minimum height=0.8cm,
+    below=0.1cm of box_dots1
+] (delayN) {$z^{-M_N}$};
+
+\draw[-{Stealth[length=3mm]}] ([xshift=-5cm,yshift=0]delayN.west) -- (delayN.west);
+\draw[-{Stealth[length=3mm]}] (delayN.east) -- ([xshift=4cm,yshift=0]delayN.east);
+
+% Input and output labels with braces
+\draw[decorate, decoration={brace, amplitude=8pt}, thick]
+    ([xshift=-5.2cm]delay1.west |- delayN.west) -- ([xshift=-5.2cm]delayN.west |- delay1.west)
+    node[midway, left=8pt] {$x[n]$};
+
+\draw[decorate, decoration={brace, amplitude=8pt, mirror}, thick]
+    ([xshift=4.2cm]delay1.east |- delayN.east) -- ([xshift=4.2cm]delayN.east |- delay1.east)
+    node[midway, right=8pt] {$y[n]$};
+
+
+% Matrices
+\node[draw,
+    fill=blue!20,
+    minimum width=2.5cm,
+    minimum height=2cm,
+    below=1cm of delayN.south,
+    inner sep=0cm
+] (hadamard) {\shortstack{Householder \\ $\mathbf{P}_n$}};
+
+\draw[-{Stealth[length=3mm]}] ([xshift=-5cm,yshift=0]delay1.west) -- (delay1.west);
+\draw[-{Stealth[length=3mm]}] (delay1.east) -- ([xshift=4cm,yshift=0]delay1.east);
+
+
+% Dots
+\node[draw, circle, minimum size=0.2cm, fill=black, inner sep=0cm, right=3.0cm of delay1] (hp_dot1) {};
+\node[draw, circle, minimum size=0.2cm, fill=black, inner sep=0cm, right=2.5cm of delay2] (hp_dot2) {};
+\node[draw, circle, minimum size=0.2cm, fill=black, inner sep=0cm, right=1.5cm of delayN] (hp_dotN) {};
+
+% Adders
+\node[draw, circle, minimum size=0.5cm, inner sep=0cm, fill=red!50, right=-4.3cm of delay1.west] (sum1) {$+$};
+\node[draw, circle, minimum size=0.5cm, inner sep=0cm, fill=red!50, right=-3.6cm of delay2.west] (sum2) {$+$};
+\node[draw, circle, minimum size=0.5cm, inner sep=0cm, fill=red!50, right=-2.8cm of delayN.west] (sumN) {$+$};
+
+
+
+
+
+% % small downward triangle labeled 2R below integrator2
+% \node[draw,
+%     isosceles triangle,
+%     shape border rotate=270,
+%     minimum size=0.8cm,
+%     fill=yellow!20,
+%     below=1.2cm of bp_dot,
+%     label={[yshift=-2mm]right:2R}
+% ] (scalar_R) {};
+
+
+
+
+
+% Connections
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (hp_dot2.south) |- (hadamard.east);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (hp_dot1.south) |- ($(hadamard.east)+(0,0.5cm)$);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (hp_dotN.south) |- ($(hadamard.east)-(0,0.5cm)$);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    (hadamard.west) -| (sum2.south);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    ($(hadamard.west)+(0,0.7cm)$) -| (sum1.south);
+
+\draw[-{Stealth[length=3mm, width=2mm]}]
+    ($(hadamard.west)-(0,0.7cm)$) -| (sumN.south);
+
+
+% Gains
+\node[draw,
+    isosceles triangle,
+    shape border rotate=180,
+    minimum size=0.5cm,
+    fill=green!20,
+    left=1.4cm of hadamard.west,
+    label={above:$g_2$}
+] (gain2) {};
+
+\node[draw,
+    isosceles triangle,
+    shape border rotate=180,
+    minimum size=0.5cm,
+    fill=green!20,
+    above left=0.555cm and 2.3cm of hadamard.west,
+    label={above:$g_1$}
+] (gain1) {};
+
+\node[draw,
+    isosceles triangle,
+    shape border rotate=180,
+    minimum size=0.5cm,
+    fill=green!20,
+    above left=-0.845cm and 0.5cm of hadamard.west,
+    label={above:$g_N$}
+] (gain3) {};
+
+
+
+% \draw[-{Stealth[length=3mm, width=2mm]}]
+%     (lp_dot.south) |- (sum2.east);
+
+% \draw[-{Stealth[length=3mm, width=2mm]}] ++(-2,0) node[above]{$x\left[n\right]$} -- (sum1.west);
+
+% \draw[-{Stealth[length=3mm, width=2mm]}]
+%     (hp_dot.north) |- ++(1cm,2cm) node[right] {$y_{\mathrm{HP}}\left[n\right]$};
+
+% \draw[-{Stealth[length=3mm, width=2mm]}]
+%     (bp_dot.north) |- ++(1cm,2cm) node[right] {$y_{\mathrm{BP}}\left[n\right]$};
+
+
+
+\end{tikzpicture}
+
+\caption{N-order Feedback-Delay Network equipped with a series of IIR Feedback Comb Filters \cite{smith2010pasp}}
+\label{fig:fdn_combfilter}
+\end{figure}

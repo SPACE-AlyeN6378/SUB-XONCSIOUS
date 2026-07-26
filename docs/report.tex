@@ -23,6 +23,7 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
 
 % ---------- Tables ----------
 \usepackage{booktabs}
@@ -76,7 +77,7 @@
 % \input{chapters/introduction}
 
 \section{Discussion}
-\input{discussion/audio_effects.tex}
+\input{discussion/audio_effects/audio_effects.tex}
 
 % \chapter{Results}
 % \input{chapters/results}
@@ -85,7 +86,12 @@
 % \input{chapters/conclusion}
 
 \bibliographystyle{IEEEtran}
-\bibliography{generative_ai, libraries, discussion/eq_filter/eq_filter}
+\bibliography{
+    generative_ai, 
+    libraries, 
+    discussion/eq_filter/eq_filter,
+    discussion/audio_effects/reverb/reverb
+}
 
 \clearpage
 
@@ -104,6 +110,10 @@
 \clearpage
 \setcounter{page}{1}
 \include{appendices/biquad_equations.tex}
+
+\clearpage
+\setcounter{page}{1}
+\include{appendices/B_reverb_code.tex}
 
 \clearpage
 \setcounter{page}{1}

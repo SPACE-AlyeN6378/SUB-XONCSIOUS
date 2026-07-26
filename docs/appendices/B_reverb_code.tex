@@ -1,0 +1,125 @@
+\section{Code Snippets for Reverberation}
+\label{app:reverb_code}
+
+This appendix presents the full set of implementation for the Signalsmith's Reverb
+described in Section \ref{sec:reverb-discussion}.
+
+\subsection{Multi-channel Comb Filter}
+
+The following implements the delay structure described by equation \eqref{eq:delay}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={process_delay-process_delay},
+    caption={Delay line processing},
+    label={lst:process-delay}
+]{../include/audio_fx/delay/Delay.hpp}
+
+The listing below (\Cref{prompt:householder_code}) \cite{openai_chatgpt} shows the implementation for both 4-order and 8-order Householder 
+transform \eqref{eq:householder-general}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={householder-householder},
+    caption={Householder matrix transformation},
+    label={lst:householder}
+]{../include/audio_fx/reverb/Hadamard.hpp}
+
+These array of delays and the Householder matrix are implemented in the multi-channel IIR Comb Filter \eqref{eq:feedback-loop} shown below.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={process_feedback-process_feedback},
+    caption={Algorithm for the Multi-channel Comb Filter},
+    label={lst:process_feedback}
+]{../include/audio_fx/reverb/allpass_systems/MultiFeedback.hpp}
+
+
+\subsection{Diffusion System}
+
+After delaying the signals (Listing \ref{lst:process-delay}), the signals are shuffled and some of them are inverted.
+The listings below shows how the array of signals are shuffled and inverted.
+
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={process_feedback-process_feedback},
+    caption={Shuffles the indices of the channels},
+    label={lst:indices-shuffle}
+]{appendices/code/permutation.cpp}
+
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={delay_shuffle-delay_shuffle},
+    caption={Inversion of amplitudes through natural selection},
+    label={lst:polarity_change}
+]{appendices/code/polarity.cpp}
+
+And finally, the array of signals pass through Hadamard transform, which is implemented in the listing below,
+for both 4-order and 8-order.
+\lstinputlisting[
+    style=cppstyle,
+    linerange={hadamard-hadamard},
+    caption={Hadamard matrix transformation},
+    label={lst:hadamard}
+]{../include/audio_fx/reverb/Hadamard.hpp}
+
+After putting everything together, the listing below shows how diffusion is processed.
+\lstinputlisting[
+    style=cppstyle,
+    linerange={diffusion_process-diffusion_process},
+    caption={Complete diffusion process},
+    label={lst:diffusion_process}
+]{../include/audio_fx/reverb/allpass_systems/Diffusion.hpp}
+
+
+\subsection{Other Helper Functions}
+
+The listing below duplicates the signal to 4, 8, or sometimes 16. The program should implement it
+at the very beginning of the reverberation process.
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={split-split},
+    caption={Splitting function},
+    label={lst:split}
+]{appendices/code/split.cpp}
+
+The listing below reunites the signals to one. The program should implement it
+at the very end of the reverberation process.
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={split-split},
+    caption={Joining function},
+    label={lst:join}
+]{appendices/code/join.cpp}
+
+Since the amplitudes are added, it could cause clips and distortions during resonance.
+So, sometimes, a gain limiter needs to be implemented.
+
+The listing below generates delays by taking the mean of the Delay time (in milliseconds),
+converts it to samples, and then takes a random range of numbers within 30-40\% of the mean.
+The quantity depends on the number of channels used.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={generate_delays-generate_delays},
+    caption={Generates a random set of delays close to the mean},
+    label={lst:generate_delays}
+]{../include/audio_fx/reverb/ReverbUtils.hpp}
+
+That particular code is only used in the comb filter. However, the diffusion system uses
+a slightly different approach. The function takes the given largest delay time it can generate
+and then generates a set of delay samples from 0 to largest. The algorithm for generating,
+however, remains the same.
+
+% TODO: Complete process from reverb
+\subsection{Complete Reverberation Process}
+
+Using these algorithms mentioned above, everything is put together to create a
+complete algorithmic reverberator below.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={complete_process-complete_process},
+    caption={The complete reverberation process},
+    label={lst:complete_reverb_process}
+]{../include/audio_fx/reverb/Reverb.cpp}

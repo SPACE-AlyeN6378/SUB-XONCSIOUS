@@ -9,7 +9,11 @@ amplitude = data["amplitude"]
 
 plt.figure(figsize=(12, 5))
 
-plt.stem(time, amplitude)
+markerline, stemlines, baseline = plt.stem(time, amplitude)
+
+plt.setp(stemlines, linewidth=0.3)
+plt.setp(markerline, visible=False)
+plt.setp(baseline, linewidth=0.3)
 
 plt.xlabel("Time (seconds)")
 plt.ylabel("Amplitude")

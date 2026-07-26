@@ -65,24 +65,24 @@ namespace AudioFX
 
         // Apply gain by multiplying each elements with the gain
 
-        // Process the output
+        // <*process_feedback>
         ArraySignal process(const ArraySignal& input) noexcept
         {
             ArraySignal output{};
 
-            // // Apply feedback matrix to previous outputs
+            // Apply Householder matrix to previous outputs
             ArraySignal feedback = Householder::transform(lastOutput);
 
             // Process delay lines
             for (size_t i = 0; i < NumChannels; ++i)
             {
                 output[i] = delays[i].process(input[i] + gain * feedback[i]);
-                
             }
 
             lastOutput = output;
             return output;
-        }
+        }   
+        // <*process_feedback>
 
 
         // Sets gain value

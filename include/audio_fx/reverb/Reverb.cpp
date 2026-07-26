@@ -27,6 +27,7 @@ AudioFX::Reverb<NumChannels>::Reverb(double diffusionTimeMs, double delayTimeMs,
     generateDiffusionChain(diffusionTimeMs, sampleRate);
 }
 
+// <*complete_process>
 template <size_t NumChannels>
 float AudioFX::Reverb<NumChannels>::process(float input)
 {
@@ -45,7 +46,7 @@ float AudioFX::Reverb<NumChannels>::process(float input)
 
     return ReverbUtils::join<NumChannels>(y);
 }
-
+// </complete_process>
 
 template <size_t NumChannels>
 std::vector<size_t> AudioFX::Reverb<NumChannels>::getFeedbackSamples()

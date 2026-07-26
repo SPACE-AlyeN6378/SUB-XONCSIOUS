@@ -14,6 +14,7 @@ namespace AudioFX
 namespace ReverbUtils
 {
 
+
 template <size_t NumChannels>
 inline std::array<float, NumChannels> split(float input)
 {
@@ -78,6 +79,7 @@ inline bool isCoprime(
     return true;
 }
 
+// <*generate_delays>
 template<size_t NumChannels>
 inline std::array<Delay<48000>, NumChannels> generateDelays(
     double meanDelayTimeMs,
@@ -107,6 +109,7 @@ inline std::array<Delay<48000>, NumChannels> generateDelays(
 
     return delays;
 }
+// </generate_delays>
 
 template<size_t NumChannels>
 inline std::array<Delay<48000>, NumChannels> generateDelaysMax(

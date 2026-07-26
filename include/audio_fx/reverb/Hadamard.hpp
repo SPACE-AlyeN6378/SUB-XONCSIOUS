@@ -9,6 +9,7 @@
 using ArraySignal4 = std::array<float, 4>;
 using ArraySignal8 = std::array<float, 8>;
 
+// <*hadamard>
 namespace Hadamard {
 
     inline ArraySignal4 transform4(ArraySignal4 input)
@@ -48,7 +49,9 @@ namespace Hadamard {
             static_assert(std::is_same_v<T, ArraySignal4> || std::is_same_v<T, ArraySignal8>, "Unsupported signal size");
     }
 }
+// </hadamard>
 
+// <*householder>
 namespace Householder {
 
     inline ArraySignal4 transform4(ArraySignal4 input)
@@ -103,5 +106,6 @@ namespace Householder {
             static_assert(std::is_same_v<T, ArraySignal4> || std::is_same_v<T, ArraySignal8>, "Unsupported signal size");
     }    
 }
+// </householder>
 
 #endif  // HADAMARD_HPP

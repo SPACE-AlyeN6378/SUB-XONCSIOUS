@@ -15,13 +15,13 @@ constexpr float GAIN = 0.7;
 
 AudioEngine::AudioEngine()
     : sampleRate(44100.0), framesPerBuffer(256), sampleCounter(0),
-      player(WAV_DIR, 44100), reverb(300.0, 150.0, GAIN, 44100.0)
+      player(WAV_DIR, 44100), reverb(300.0, 200.0, GAIN, 44100.0)
 {
 }
 
 AudioEngine::AudioEngine(double sr, unsigned long frames)
     : sampleRate(sr), framesPerBuffer(frames), sampleCounter(0),
-      player(WAV_DIR, 44100), reverb(300.0, 150.0, GAIN, 44100.0)
+      player(WAV_DIR, 44100), reverb(300.0, 200.0, GAIN, 44100.0)
 {
 }
 

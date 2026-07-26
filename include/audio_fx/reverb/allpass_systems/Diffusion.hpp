@@ -97,6 +97,7 @@ public:
     /**
     * @brief Part of the process, which only performs delays and shuffle
     */
+    // <*diffusion_process>
     ArraySignal delayAndShuffle(const ArraySignal& input) noexcept
     {
         float delayed;
@@ -111,6 +112,7 @@ public:
 
         return output;
     }
+    
 
     /**
     * @brief Complete the diffusion process
@@ -120,9 +122,8 @@ public:
         return Hadamard::transform<ArraySignal>(
             delayAndShuffle(input)
         );
-
-        // return delayAndShuffle(input);
     }
+    // </diffusion_process>
 
     // Resets the last output to zero
     void reset() noexcept

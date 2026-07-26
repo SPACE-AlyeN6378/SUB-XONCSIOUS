@@ -21,6 +21,7 @@ public:
             throw std::invalid_argument("Invalid delay length");
     }
 
+    //<*process_delay>
     float process(float input)
     {
         // Read delayed sample
@@ -37,6 +38,7 @@ public:
 
         return output;
     }
+    //</process_delay>
 
     void setDelay(size_t samples)
     {

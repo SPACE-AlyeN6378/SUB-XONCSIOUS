@@ -18,12 +18,12 @@ add_library(oscillator include/audio_source/Oscillator.cpp)
 target_include_directories(oscillator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # -------------------------------------------------
-# Audio Player Library
+# Audio Clip Player Library
 # -------------------------------------------------
 
-add_library(audio_player include/audio_source/audio_clip/AudioPlayer.cpp)
-target_include_directories(audio_player PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(audio_player PUBLIC sndfile)
+add_library(clip_player include/audio_source/audio_clip/AudioClipPlayer.cpp)
+target_include_directories(clip_player PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(clip_player PUBLIC sndfile)
 
 # -------------------------------------------------
 # Voice Library
@@ -44,7 +44,7 @@ target_include_directories(audio_engine
 
 target_link_libraries(audio_engine PUBLIC 
     voice 
-    audio_player 
+    clip_player 
     asound
     reverb
     ${PORTAUDIO_LIBRARIES})
@@ -83,6 +83,8 @@ add_executable(plot_data tests/FilterPlotData.cpp)
 add_executable(BiQuadTest tests/BiQuadTest.cpp)
 add_executable(AudioTest tests/AudioEngineTest.cpp)
 add_executable(ReverbTest tests/ReverbTest.cpp)
+add_executable(debug tests/debugger.cpp)
+
 
 # Link the required libraries to each executable
 target_link_libraries(SVFTest PRIVATE oscillator svf Catch2::Catch2WithMain)
@@ -90,4 +92,5 @@ target_link_libraries(plot_data PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(BiQuadTest PRIVATE oscillator biquad Catch2::Catch2WithMain)
 target_link_libraries(ReverbTest PRIVATE reverb Catch2::Catch2WithMain)
 target_link_libraries(AudioTest PRIVATE audio_engine)
+target_link_libraries(debug PRIVATE clip_player)
 

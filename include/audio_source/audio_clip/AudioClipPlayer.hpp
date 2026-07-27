@@ -8,34 +8,35 @@
 #include <stdexcept>
 #include <utility>
 #include <iostream>
+#include <numbers>
 #include "../AudioSource.hpp"
+
 
 struct AudioClip
 {
     std::vector<float> samples;
-    unsigned int channels;
     double sampleRate;
 
-    float getSample(std::size_t frame, std::size_t channel) const;
+    float getSample(std::size_t frame) const;
     std::size_t getFrameCount() const noexcept;
 
     static AudioClip import(const std::string& filename);
 };
 
-class AudioPlayer
+class AudioClipPlayer
 {
 public:
-    explicit AudioPlayer(const std::string& filename, double sampleRate)
+    explicit AudioClipPlayer(const std::string& filename, double sampleRate)
         : 
         clip(AudioClip::import(filename)),
         engineSampleRate(sampleRate),
         position(0.0)
-        // FUTURE: In future version control, please support surround sound
+
     {
         increment = clip.sampleRate / engineSampleRate;
     }
 
-    void generate(float* output);
+    float generate();
     void reset();
 
 private:
@@ -44,6 +45,6 @@ private:
     double increment;
     double engineSampleRate;
 
-    float interpolate(std::size_t channel) const;
+    float interpolate() const;
 };
 #endif  // AUDIO_PLAYER_HPP

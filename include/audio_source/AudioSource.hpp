@@ -9,7 +9,7 @@ public:
     virtual float generate(std::size_t channel) = 0;
 
 protected:
-    unsigned long framesPerBuffer;
+    // unsigned long framesPerBuffer;
     double sampleRate;
 };
     

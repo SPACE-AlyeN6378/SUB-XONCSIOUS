@@ -7,7 +7,7 @@
 #include <memory>
 #include "track/voice/Voice.hpp"
 #include "audio_source/AudioSource.hpp"
-#include "audio_source/audio_clip/AudioPlayer.hpp"
+#include "audio_source/audio_clip/AudioClipPlayer.hpp"
 #include "audio_fx/reverb/Reverb.hpp"
 #include <cstdint>
 
@@ -144,7 +144,7 @@ private:
     uint64_t sampleCounter {0};
     bool initialized{false};
 
-    AudioPlayer player;
+    AudioClipPlayer player;
     AudioFX::Reverb<8> reverb;
     // FeedbackDelay<MAX_DELAY> fdR;
 

@@ -7,8 +7,11 @@
 #include <string>
 // #include <memory>
 
-const std::string WAV_DIR{"include/track/metronome/dry-wood-block.wav"};
-// const std::string WAV_DIR{"/home/space_alyen/Downloads/o95.wav"};
+// const std::string WAV_DIR{"include/track/metronome/dry-wood-block.wav"};
+// const std::string WAV_DIR{"/home/space_alyen/Downloads/windows7.wav"};
+const std::string WAV_DIR{
+    "/home/space_alyen/Downloads/Sonatina Symphonic Orchestra/Samples/Grand Piano/piano-p-c5.wav"
+};
 
 // constexpr size_t delaySamples = 3200;
 constexpr float GAIN = 0.7;
@@ -222,12 +225,10 @@ int AudioEngine::callback(
 
     for (unsigned long i = 0; i < framesPerBuffer; ++i)
     {
-        float playerBuffer[2];
-
-        state->player.generate(playerBuffer);
-        float mono_signal = state->reverb.process(playerBuffer[0]);
-        out[i*2]     = mono_signal;
-        out[i*2 + 1] = mono_signal;
+        float audio = state->player.generate();
+        // float mono_signal = state->reverb.process(playerBuffer[0]);
+        out[i*2]     = audio;
+        out[i*2 + 1] = audio;
     }
 
     // Finish measuring the time taken for this callback

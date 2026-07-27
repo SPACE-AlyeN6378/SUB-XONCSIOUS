@@ -1,9 +1,13 @@
-#include "AudioPlayer.hpp"
+#include "AudioClipPlayer.hpp"
 #include <sndfile.h>
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <numbers>
 #define DEBUG false
+
+
+constexpr float INV_SQRT2 = 1.0f / std::numbers::sqrt2_v<float>;
 
 AudioClip AudioClip::import(const std::string &filename)
 {
@@ -22,6 +26,12 @@ AudioClip AudioClip::import(const std::string &filename)
         std::cout << "Channels: " << info.channels << "\n";
         std::cout << "Format: " << info.format << "\n";
     }
+
+    // Add guard for unsupported audio channels
+    if (info.channels > 2)
+    {
+        throw std::runtime_error("Only stereo and mono channels currently supported");
+    }
     
     // Create a vector which must contain samples
     std::vector<float> samples(info.frames * info.channels);
@@ -34,72 +44,69 @@ AudioClip AudioClip::import(const std::string &filename)
     // Don't forget to close!
     sf_close(file);
 
+    // Downmix to mono
+    if (info.channels == 2)
+    {
+        std::cerr << "WARNING: Stereo WAV detected. Downmixing to mono." << std::endl;
+
+        std::vector<float> mono(info.frames);
+        for (int i=0; i<info.frames; ++i)
+        {
+            mono[i] = (samples[i*2] + samples[i*2+1]) * INV_SQRT2;
+        }
+
+        samples = std::move(mono);
+    }
+
     return AudioClip(
         std::move(samples), 
-        static_cast<unsigned int>(info.channels), 
         static_cast<double>(info.samplerate)
     );
 }
 
-float AudioClip::getSample(std::size_t frame, std::size_t channel) const
+float AudioClip::getSample(std::size_t frame) const
 {
-    if (channel >= channels)
-        throw std::out_of_range("Invalid channel");
-
     if (frame >= getFrameCount())
         return 0.0f;
     
     // std::cout << "Index taken: " << index * channels + channel << std::endl;    
-    return samples[frame * channels + channel]; 
+    return samples[frame]; 
 }
 
 std::size_t AudioClip::getFrameCount() const noexcept
 {
-    return samples.size() / channels;
+    return samples.size();
 }
 
 
-void AudioPlayer::generate(float* output)
+float AudioClipPlayer::generate()
 {
     // After exceeding the last frame
     if (position + 1 >= clip.getFrameCount())
     {
-        // output[0] = left channel
-        // output[1] = right channel
-        output[0] = 0.0f;
-        output[1] = 0.0f;
-        return;
+        return 0.0f;
     }
 
-    if (clip.channels == 1)
-    {
-        float mono = interpolate(0);
-        output[0] = mono;
-        output[1] = mono;
-    }
-    else if (clip.channels == 2)
-    {
-        output[0] = interpolate(0);
-        output[1] = interpolate(1);
-    }
-
+    float output = interpolate();
     position += increment;
+
+    return output;
 }
 
 
-void AudioPlayer::reset()
+void AudioClipPlayer::reset()
 {
     position = 0.0;
 }
 
-float AudioPlayer::interpolate(std::size_t channel) const
+float AudioClipPlayer::interpolate() const
 {
     std::size_t frame = static_cast<std::size_t>(position);
 
     double fraction = position - frame;
 
-    float s0 = clip.getSample(frame, channel);
-    float s1 = clip.getSample(frame + 1, channel);
+    float s0 = clip.getSample(frame);
+    float s1 = clip.getSample(frame + 1);
 
     return s0 + fraction*(s1 - s0);
 }

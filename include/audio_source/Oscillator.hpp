@@ -62,7 +62,8 @@ public:
      */
     void updateCache() noexcept;
 
-    float generate(std::size_t channel = 0) override;
+    float generate() override;
+    void reset() override;
 
 private:
     std::atomic<double> frequency;

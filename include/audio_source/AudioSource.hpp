@@ -6,11 +6,12 @@ class AudioSource {
 public:
 
     virtual ~AudioSource() = default;
-    virtual float generate(std::size_t channel) = 0;
+    virtual float generate() = 0;
+    virtual void reset() = 0;
 
 protected:
     // unsigned long framesPerBuffer;
-    double sampleRate;
+    double engineSampleRate;
 };
     
 #endif // AUDIO_SOURCE_HPP

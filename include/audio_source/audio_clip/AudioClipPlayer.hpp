@@ -23,7 +23,7 @@ struct AudioClip
     static AudioClip import(const std::string& filename);
 };
 
-class AudioClipPlayer
+class AudioClipPlayer : public AudioSource
 {
 public:
     explicit AudioClipPlayer(const std::string& filename, double sampleRate)
@@ -36,8 +36,8 @@ public:
         increment = clip.sampleRate / engineSampleRate;
     }
 
-    float generate();
-    void reset();
+    float generate() override;
+    void reset() override;
 
 private:
     AudioClip clip;

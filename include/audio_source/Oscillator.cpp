@@ -13,7 +13,7 @@ Oscillator::Oscillator(OscShape shape, double frequency, float amplitude, double
     this->cache.amplitude       = amplitude;
     this->cache.phaseIncrement  = frequency / sampleRate;
 
-    this->sampleRate = sampleRate;
+    this->engineSampleRate = sampleRate;
 }
 
 double Oscillator::getFrequency() const noexcept
@@ -45,10 +45,10 @@ void Oscillator::updateCache() noexcept
 {
     cache.frequency         = frequency.load(std::memory_order_relaxed);
     cache.amplitude         = amplitude.load(std::memory_order_relaxed);
-    cache.phaseIncrement    = cache.frequency / sampleRate;
+    cache.phaseIncrement    = cache.frequency / engineSampleRate;
 }
 
-float Oscillator::generate(std::size_t /*channel*/)
+float Oscillator::generate()
 {
     float sample;
 
@@ -75,4 +75,10 @@ float Oscillator::generate(std::size_t /*channel*/)
     if (phase >= 1.0) phase -= 1.0;
 
     return sample;
+}
+
+void Oscillator::reset()
+{
+    this->cache.phaseIncrement = 0.0;
+    this->phase = 0.0;
 }

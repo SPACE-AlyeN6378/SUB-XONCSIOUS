@@ -110,3 +110,4 @@ float AudioClipPlayer::interpolate() const
 
     return s0 + fraction*(s1 - s0);
 }
+

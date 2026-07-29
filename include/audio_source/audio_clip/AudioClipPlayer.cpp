@@ -7,7 +7,6 @@
 #define DEBUG false
 
 
-constexpr float INV_SQRT2 = 1.0f / std::numbers::sqrt2_v<float>;
 
 AudioClip AudioClip::import(const std::string &filename)
 {
@@ -52,7 +51,9 @@ AudioClip AudioClip::import(const std::string &filename)
         std::vector<float> mono(info.frames);
         for (int i=0; i<info.frames; ++i)
         {
-            mono[i] = (samples[i*2] + samples[i*2+1]) * INV_SQRT2;
+            mono[i] = AudioSource::downmixToMono(
+                samples[i*2], samples[i*2+1]
+            );
         }
 
         samples = std::move(mono);

@@ -11,6 +11,7 @@
 #include "audio_fx/reverb/Reverb.hpp"
 #include <cstdint>
 
+#include "track/instrument/fluidsynth/FSInstrument.hpp"
 
 constexpr std::size_t MAX_DELAY = 48000;
 
@@ -146,6 +147,11 @@ private:
 
     AudioClipPlayer player;
     AudioFX::Reverb<8> reverb;
+    
+    FSInstrument instrument;
+    std::vector<unsigned char> notes;
+    size_t noteIndex = 0;
+
     // FeedbackDelay<MAX_DELAY> fdR;
 
     PaStream* stream{nullptr};

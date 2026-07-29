@@ -8,6 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PORTAUDIO REQUIRED portaudio-2.0)
+pkg_check_modules(SFIZZ REQUIRED sfizz)
+pkg_check_modules(FLUIDSYNTH REQUIRED fluidsynth)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
@@ -20,10 +22,42 @@ target_include_directories(oscillator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 # -------------------------------------------------
 # Audio Clip Player Library
 # -------------------------------------------------
-
 add_library(clip_player include/audio_source/audio_clip/AudioClipPlayer.cpp)
 target_include_directories(clip_player PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(clip_player PUBLIC sndfile)
+
+# -------------------------------------------------
+# Sforzando Library
+# -------------------------------------------------
+add_library(sfz_instrument
+    include/track/instrument/sfz/SFZInstrument.cpp
+)
+
+target_include_directories(sfz_instrument
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    ${SFIZZ_INCLUDE_DIRS}
+)
+
+target_link_libraries(sfz_instrument
+    PUBLIC
+    ${SFIZZ_LIBRARIES}
+)
+
+# -------------------------------------------------
+# Fluisynth Instrument Library
+# -------------------------------------------------
+add_library(fs_instrument
+    include/track/instrument/fluidsynth/FSInstrument.cpp
+)
+
+target_include_directories(fs_instrument 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include 
+    ${FLUIDSYNTH_INCLUDE_DIRS})
+
+target_link_libraries(fs_instrument 
+    PUBLIC 
+    ${FLUIDSYNTH_LIBRARIES})
 
 # -------------------------------------------------
 # Voice Library
@@ -31,23 +65,6 @@ target_link_libraries(clip_player PUBLIC sndfile)
 add_library(voice include/track/voice/Voice.cpp)
 target_include_directories(voice PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(voice PUBLIC oscillator)
-
-# -------------------------------------------------
-# Audio Engine Library
-# -------------------------------------------------
-add_library(audio_engine include/audio_engine/AudioEngine.cpp)
-target_include_directories(audio_engine
-    PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
-        ${PORTAUDIO_INCLUDE_DIRS}
-)
-
-target_link_libraries(audio_engine PUBLIC 
-    voice 
-    clip_player 
-    asound
-    reverb
-    ${PORTAUDIO_LIBRARIES})
 
 # -------------------------------------------------
 # BiQuad Filter library
@@ -70,6 +87,24 @@ target_include_directories(feedback_delay PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(reverb include/audio_fx/reverb/Reverb.cpp)
 target_include_directories(reverb PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
+# -------------------------------------------------
+# Audio Engine Library
+# -------------------------------------------------
+add_library(audio_engine include/audio_engine/AudioEngine.cpp)
+target_include_directories(audio_engine
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include
+        ${PORTAUDIO_INCLUDE_DIRS}
+)
+
+target_link_libraries(audio_engine PUBLIC 
+    voice
+    fs_instrument 
+    clip_player 
+    asound
+    reverb
+    ${PORTAUDIO_LIBRARIES})
+
 
 # =================================================================================
 
@@ -85,12 +120,14 @@ add_executable(AudioTest tests/AudioEngineTest.cpp)
 add_executable(ReverbTest tests/ReverbTest.cpp)
 add_executable(debug tests/debugger.cpp)
 
-
 # Link the required libraries to each executable
 target_link_libraries(SVFTest PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(plot_data PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(BiQuadTest PRIVATE oscillator biquad Catch2::Catch2WithMain)
 target_link_libraries(ReverbTest PRIVATE reverb Catch2::Catch2WithMain)
 target_link_libraries(AudioTest PRIVATE audio_engine)
-target_link_libraries(debug PRIVATE clip_player)
+target_link_libraries(debug PRIVATE fs_instrument)
+
+
+
 

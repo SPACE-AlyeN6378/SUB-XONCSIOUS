@@ -1,0 +1,13 @@
+\subsubsection{Choice of Sampling Rate}
+
+According to Nyquist's theorem, the maximum frequency ($f_{\text{max}}$) that the DSP system can analyze needs to be 
+half the sampling rate. And it is described by the following equation \cite{siemens_dsp_sampling}:
+
+\begin{equation}
+    f_s \geq 2 f_{\text{max}}
+\end{equation}
+
+The upper limit of the audible range of a human ear is at \SI{20}{\kilo \hertz}. So the sampling rate
+needs to be at least \SI{40}{\kilo \hertz} to prevent aliasing, or any unwanted distortion. Therefore,
+\SI{44.1}{\kilo \hertz} is wide adapted as a standard for music production and writing them in 
+CDs \cite{lisacademy2026digitalaudio}.

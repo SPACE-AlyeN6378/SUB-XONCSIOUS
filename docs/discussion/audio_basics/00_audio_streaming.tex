@@ -1,0 +1,74 @@
+\subsection{DSP and Audio Streaming}
+
+To get started, the computer needs to have a way to store audio waveforms inside the memory. But the system only understands digital values.
+According to all known concepts of Digital Signal Processing (DSP), since physical sound waves are composed of voltage-varying continuous 
+time signals, the system stores these waveforms as discrete-time signals \cite{lyons2004dsp}. Their independent time variables are quantized 
+into samples, and each sample have their voltages quantized into 8, 16, or 32-bit floating point values \cite{lisacademy2026digitalaudio}.
+
+The sampling frequency or sampling rate determines the number of samples within the given time frame. It is described by the following
+equation:
+
+\begin{equation}\label{eq:sampling_rate}
+    f_s = \frac{1}{T_s}
+\end{equation}
+
+Where $f_s$ is the sampling rate and $t_s$ is the time interval between samples.
+
+In this way, the given time duration ($t$) can be determined by the following equation:
+\begin{equation}\label{eq:time_duration}
+    t = \frac{n}{f_s} = n T_s
+\end{equation}
+
+Where $n$ is the number of samples within this duration.
+
+Therefore using these equations \eqref{eq:sampling_rate} and \eqref{eq:time_duration}, a sine wave, for example, can be modelled
+using the following equation, assuming that the frequency ($f$) of the wave is known:
+
+\begin{equation}
+    x[n] = \sin{(2 \pi f n T_s)} = \sin{ \left(2 \pi f \frac{n}{f_s}\right) }
+\end{equation}
+
+\Cref{fig:sine_wave_quantization} below shows an example of a comparison between the continuous time signal and the discrete-time signal, 
+illustrating how these energies are discretized into samples. This example uses \SI{2}{\hertz} sine wave, with a sampling rate
+of \SI{20}{\hertz}, with 3-bit (8 levels) quantization of amplitudes (\Cref{prompt:example_dsp_plot}) \cite{anthropicclaude}. 
+This also means 10 distinctive samples 
+are created for each time period of sine wave.
+
+\input{discussion/audio_basics/figures/sine_wave_quantization.tex}
+
+PortAudio is used in the project for audio playback and recording. It utilizes an API that iterates through an array of samples
+using a simple callback function that runs periodically until the application stops running. Given the sampling rate, and using the above
+example of the sine wave (\Cref{fig:sine_wave_quantization}), the following example (\Cref{prompt:example_float_values}) \cite{anthropicclaude} 
+shows a series of samples the callback function would iterate through: 
+
+\begin{verbatim}
+0.000000  0.571429  0.857143  0.857143
+...
+0.571429  0.857143  0.857143  0.571429  0.000000
+\end{verbatim}
+
+The program iterates through these samples at a time interval of $T = 1/f_s$. Using such samples provides the ability
+to shape and mold wave signal in all forms. Which is why it makes it much easier to model audio signals using mathematical
+equations derived from textbooks.
+
+% Subsections
+\input{discussion/audio_basics/01_nyquist.tex}
+\input{discussion/audio_basics/02_event_scheduling.tex}
+\input{discussion/audio_basics/03_latency.tex}
+\input{discussion/audio_basics/04_comp_req.tex}
+
+% Using thread sleeping/waiting mechanisms based on durations (which are often paired with std::chrono) does not provide hard timing guarantees because the OS scheduler can delay execution.
+
+% We use samples for real-time scheduling because audio hardware already provides the most accurate clock in the system. std::chrono measures wall-clock time; samples represent the exact timeline of the audio stream.
+
+% samples are not inherently a clock. They become a clock because the sampling rate is fixed. A sequence of samples without knowing fs
+% has no absolute time information.
+
+% The sample index is used as a timing metric because the sampling clock establishes a fixed temporal relationship between consecutive samples. Therefore, elapsed audio time can be represented as a number of samples, with conversion determined by the sampling rate.
+
+
+
+% References:
+% sleep_for cannot be used: https://en.cppreference.com/cpp/thread/sleep_for?utm_source=chatgpt.com
+
+% TODO: Add this prompt: ``Why do we use samples for real-time scheduling instead of std::chrono?''

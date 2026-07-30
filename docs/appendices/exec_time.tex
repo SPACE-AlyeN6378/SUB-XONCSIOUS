@@ -1,0 +1,63 @@
+\section{Measurement of Callback Execution Time}
+\label{app:exec_time}
+
+The following code below shows a part of the PortAudio callback function for the 
+DAW, and how the callback execution is measured using \texttt{std::chrono}:
+
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={process_delay-process_delay},
+    caption={The audio callback function showing how the time is measured},
+    label={lst:callback-time}
+]{appendices/code/exec_time_code.cpp}
+
+
+This listing below shows the C++ struct definition of the statistical values. 
+This holds the temporary values required to calculate the mean, max standard 
+deviation. These variables are encapsulated like this to keep the code clean.
+
+
+\begin{lstlisting}[style=cppstyle, caption={Audio callback statistics structure}, label={lst:audiocallbackstats}]
+struct AudioCallbackStats
+{
+    std::atomic<double> callbackTimeUs{0.0};
+    std::atomic<uint64_t> sumUs{0};
+    std::atomic<uint64_t> count{0};
+    std::atomic<uint64_t> maxUs{0};
+
+    std::atomic<uint64_t> squareSumUs{0};
+};
+\end{lstlisting}
+
+
+Listing C.3. is used to calculate the mean value of the callback time, and Listing C.4 is used to calculate the standard deviation. 
+This should be done after PortAudio finishes streaming and the program accumulates the sum of the measured callback times, 
+the total number of callback times measured, and the squared values of the callback times.
+
+
+\begin{lstlisting}[style=cppstyle, caption={Function to calculate the mean of the callback times}, 
+    label={lst:mean_callback}]
+double AudioEngine::getAvgCallbackTimeUs() const noexcept
+{
+    return stats.sumUs.load() / (double)stats.count.load();
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[style=cppstyle, caption={Function to calculate the standard deviation of the callback times}, 
+    label={lst:stddev_callback}]
+double AudioEngine::getStdDevCallbackTimeUs() const noexcept
+{
+    double n = (double)stats.count.load();
+
+    if (n <= 1.0) // Avoid division by zero or negative variance
+        return 0.0;
+
+    double sum = stats.sumUs.load();
+    double squareSum = stats.squareSumUs.load();
+
+    // Standard deviation based on the sample formula: sqrt((sum(xi - mu)^2) / N - 1)
+    double variance = (squareSum - sum * sum / n) / (n - 1.0);
+    return std::sqrt(variance);
+}
+\end{lstlisting}

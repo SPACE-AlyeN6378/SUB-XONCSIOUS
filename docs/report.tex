@@ -77,6 +77,7 @@
 % \input{chapters/introduction}
 
 \section{Discussion}
+\input{discussion/audio_basics/00_audio_streaming.tex}
 \input{discussion/audio_effects/audio_effects.tex}
 
 % \chapter{Results}
@@ -90,7 +91,8 @@
     generative_ai, 
     libraries, 
     discussion/eq_filter/eq_filter,
-    discussion/audio_effects/reverb/reverb
+    discussion/audio_effects/reverb/reverb,
+    discussion/audio_basics/basics
 }
 
 \clearpage
@@ -106,6 +108,10 @@
     {}
 
 \renewcommand{\thepage}{\thesection-\arabic{page}}
+
+\clearpage
+\setcounter{page}{1}
+\include{appendices/exec_time.tex}
 
 \clearpage
 \setcounter{page}{1}

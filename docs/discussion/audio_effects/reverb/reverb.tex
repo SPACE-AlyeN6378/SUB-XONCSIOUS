@@ -142,8 +142,9 @@ This should satisfy the following equation \cite{smith2010pasp}:
 This algorithm is tested by applying this to a dry wood block sound, resulting in a more spacious and diffuse sound with a smooth decay,
 which is successful. It is tested using the following settings:
 
+% TODO: Change this portion to a table adjusting different parameters to a table, and put perceptual comment
 \begin{itemize}
-    \item Feedback Loop Average delay time -- \SI{200.0}{\milli\second} % ms, 200.0, 0.8, 44100.0
+    \item Feedback Loop Average delay time -- \SI{200.0}{\milli\second}
     \item 4 diffuser systems, 8 channels
     \item Total target diffusion time -- \SI{300.0}{\milli\second} (\SI{20.0}{\milli\second} +
                                             \SI{40.0}{\milli\second} + \SI{80.0}{\milli\second} + 
@@ -166,13 +167,14 @@ a gain of 0.8 is estimated for 7 seconds. This also indicates the reverberation 
 \input{discussion/audio_effects/reverb/figures/amp_envelope_reverb.tex}
 
 This reverb is currently at bare minimum. Therefore, as discussed in Geriant's blog \cite{luff2021reverb},  
-this can be further improved by adding a delay between the diffuser and the signal, to put a time gap
+this can be further improved by adding a delay between the diffuser and the signal to put a time gap
 between early reflection and late reverberations \cite{valimaki2012fifty}. Then, adding gentle LFO/modulation to delay
 times gives the reverbed audio a ``supernaturally thick sound'', because some physical changes in the environment can
 affect the timing in the reflections of sounds. And finally, shelving filter in the FDN can be added to absorb higher
 frequencies, since they are absorbed much faster in real-life. All these improvements mentioned will make the reverbed
 audio sound more realistic.
 
+\paragraph{About Convolutional Reverb}
 There is another way to make reverberation sound more accurate, which is the Convolutional Reverb, used in Logic Pro's
 space Designer, for example \cite{apple2026spacedesigner}. It uses impulse responses recorded from real spaces. Then it 
 takes that unique pattern of reflections to any audio source, therefore replicating spacious and diffused sound, when 
@@ -180,4 +182,3 @@ algorithmic reverb only depends on mathematical estimates. Even though it is mor
 less flexible any to parameter changes \cite{masteringbox2025convolution}. And most importantly, the captured impulse 
 responses need to be recorded and cannot be done due to resource unavailability.
 
-% TODO: Add another appendix for code listing

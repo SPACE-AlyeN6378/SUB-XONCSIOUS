@@ -1,0 +1,36 @@
+\subsubsection{Using Samples for Scheduling}
+
+It is known from equation \eqref{eq:time_duration} that the number of samples 
+define duration. Assuming that the sampling rate remains fixed, it provides a useful 
+metric for timestamping and scheduling MIDI events, whenever a melody is written. 
+For example, given the sample rate ($f_s$), and the tempo in BPM, the time duration 
+of one beat in samples is estimated using the following equation:
+
+\begin{equation}
+    t = \left\lfloor f_s \times  \frac{60}{\text{BPM}} \right\rfloor
+\end{equation}
+
+For example, if a music is played at 80 BPM, and the sample rate is \SI{44.1}{\kilo \hertz},
+
+$$
+    t = \left\lfloor 44100 \times \frac{60}{80} \right\rfloor = 33075
+$$
+
+This means that 33,075 samples are required to make one beat. However, the length of one 
+music note is not limited to one beat.
+
+Using the same tempo and sampling rate, when a note is scheduled at the 3rd beat, it needs to wait until
+the first $33075 \times 2 = 66150$ samples are processed.
+
+This makes it very useful during mixing all the tracks using samples, just to keep the timings
+consistent without any interruption. It was initially thought of using \texttt{sleep\_for()} from
+the C++ \texttt{std::chrono} library, which pauses an execution for a certain amount of time.
+However, this introduces complexities which might require creating enormous amount of threads. Sometimes, they could halt
+any high-priority callbacks which may cause bugs. But most importantly, sometimes \texttt{sleep\_for()}
+can block for longer than the specified duration due to OS-related scheduling and resource contention 
+\cite{cppreference_sleep_for}, which is not real-time friendly by any means. 
+
+To further support this statement, audio hardware already provides the most accurate clock
+in the system (\Cref{prompt:chronovssample}) \cite{openai_chatgpt}. Therefore, the audio callback 
+timing using the number of samples provides an accurate scheduling of each MIDI events in the 
+audio engine.

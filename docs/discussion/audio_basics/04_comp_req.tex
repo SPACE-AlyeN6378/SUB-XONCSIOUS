@@ -1,0 +1,44 @@
+\subsubsection{Computational Time Requirements}
+\label{sec:comp_req}
+
+To maintain audio quality in real-time, the deadline must meet the processing requirements, the audio engine
+needs to finish processing to synthesize audio and apply DSP within the buffer period \cite{zhao2024multithreaded}, 
+until the next chunk of samples are processed. Derived from Rate Monotonic Scheduling theory (\Cref{prompt:execution_time}) 
+\cite{openai_chatgpt}, the ratio ($U$) between the callback execution time, $C$ and the buffer duration ($t_{\text{buffer}}$)
+determines the the real-time processor utilization, representing the portion of the available deadline 
+consumed by the audio engine. This is described by the following equation below \cite{liu1973scheduling}:
+
+\begin{equation}\label{eq:execution_time}
+    U = \frac{C}{t_{\text{buffer}}}
+\end{equation}
+
+The processing time satisfies the deadline requirements, if and only if $C < t_{\text{buffer}}$ or $U < 1$.
+Otherwise, it will lead to glitches (observed through clicks and pops) and some unwanted artifacts.
+
+Design a real-time friendly audio engine with DSP, it must maintain real-time constraints, which includes
+avoiding any function calls that takes a longer period of time to execute. These might include the following \cite{portaudio}:
+\begin{itemize}
+    \item Memory allocation/deallocation
+    \item I/O (e.g. \texttt{printf()}, \texttt{std::cin}, etc.)
+    \item Context switching (e.g. \texttt{exec()}, or \texttt{yield()})
+    \item Any mutex operations
+    \item Any tasks related to the operating system
+    \item Functions with too much time complexity
+\end{itemize}
+
+\Cref{app:exec_time} shows the code listings which measures the callback execution times using \texttt{std::chrono::high\_resolution\_clock::now()}. 
+It takes multiple readings for as long as the audio engine runs, which are useful for statistical analysis. This includes the mean, 
+maximum (worst-case execution time), and the standard deviation (determines consistency). If the mean or maximum callback time is greater 
+than the buffer duration, then there are glitches present during the stream, so it either is a performance issue or a bug needs to 
+be fixed.
+
+A numerically different approach for calculating the standard deviation is conducted using the accumulation 
+of the sum of callback times, and the squared callback times on to a single variable,
+instead of an array or \texttt{std::vector}. The following equation determines this standard deviation \Cref{prompt:stddev}
+\cite{haas2022sumofsquares,openai_chatgpt}:
+
+\begin{equation}\label{eq:stddev}
+    \sigma = \sqrt{ \frac{\sum x^2 - \frac{\left(\sum x\right)^2}{n} }{n - 1} }
+\end{equation}
+
+A larger standard deviation indicates larger variations in time, which means more jitter.

@@ -1,21 +1,24 @@
+#include "track/instrument/fluidsynth/FSInstrument.hpp"
 #include <iostream>
-#include <numbers>
-#include "audio_source/audio_clip/AudioClipPlayer.hpp"
-
-constexpr float INV_SQRT2 = 1.0f / std::numbers::sqrt2_v<float>;
 
 int main()
 {
-    AudioClipPlayer player("/home/space_alyen/Downloads/o95.wav", 44100.0);
+    FSInstrument instrument(
+        "FluidR3",
+        "/home/space_alyen/Music/Libraries/Soundfonts/FluidR3 GM + GS.sf2",
+        512,
+        44100.0
+    );
 
-    for (int i=0; i<44100 * 10; ++i)
+    auto presets = instrument.getInstruments();
+
+    for (const auto& p : presets)
     {
-        float output = player.generate();
-        // std::cout << output << std::endl;
-        if (output > 1e-6)
-        {   
-            std::cout << output << std::endl;
-        }
+        std::cout
+            << p.bank << " : "
+            << p.program << " : "
+            << p.name << '\n';
     }
+
     return 0;
 }

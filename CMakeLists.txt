@@ -66,6 +66,16 @@ add_library(voice include/track/voice/Voice.cpp)
 target_include_directories(voice PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(voice PUBLIC oscillator)
 
+
+# -------------------------------------------------
+# Track Library
+# -------------------------------------------------
+add_library(midi_track include/track/MIDITrack.cpp)
+target_include_directories(voice PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(midi_track PUBLIC)
+
+
+# AUDIO EFFECTS ==========================================================================
 # -------------------------------------------------
 # BiQuad Filter library
 # -------------------------------------------------
@@ -77,6 +87,12 @@ target_include_directories(biquad PUBLIC ${PROJECT_SOURCE_DIR}/include)
 # -------------------------------------------------
 add_library(svf include/audio_fx/eq_filter/StateVariableFilter.cpp)
 target_include_directories(svf PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+# -------------------------------------------------
+# Compressor library
+# -------------------------------------------------
+add_library(compressor include/audio_fx/compressor/Compressor.cpp)
+target_include_directories(compressor PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # -------------------------------------------------
 # Delay & Reverb library
@@ -95,11 +111,14 @@ target_include_directories(audio_engine
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
         ${PORTAUDIO_INCLUDE_DIRS}
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}
 )
 
 target_link_libraries(audio_engine PUBLIC 
     voice
     fs_instrument 
+    midi_track
     clip_player 
     asound
     reverb
@@ -118,7 +137,8 @@ add_executable(plot_data tests/FilterPlotData.cpp)
 add_executable(BiQuadTest tests/BiQuadTest.cpp)
 add_executable(AudioTest tests/AudioEngineTest.cpp)
 add_executable(ReverbTest tests/ReverbTest.cpp)
-add_executable(debug tests/debugger.cpp)
+add_executable(MidiDAOTest tests/MIDIClipDAOTest.cpp)
+add_executable(CompressorTest tests/CompressorTest.cpp)
 
 # Link the required libraries to each executable
 target_link_libraries(SVFTest PRIVATE oscillator svf Catch2::Catch2WithMain)
@@ -126,8 +146,6 @@ target_link_libraries(plot_data PRIVATE oscillator svf Catch2::Catch2WithMain)
 target_link_libraries(BiQuadTest PRIVATE oscillator biquad Catch2::Catch2WithMain)
 target_link_libraries(ReverbTest PRIVATE reverb Catch2::Catch2WithMain)
 target_link_libraries(AudioTest PRIVATE audio_engine)
-target_link_libraries(debug PRIVATE fs_instrument)
-
-
-
+target_link_libraries(MidiDAOTest PRIVATE midi_track Catch2::Catch2WithMain)
+target_link_libraries(CompressorTest PRIVATE oscillator compressor)
 

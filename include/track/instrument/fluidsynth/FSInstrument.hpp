@@ -45,7 +45,6 @@ public:
     // AudioSource interface
     float generate() override;
 
-    bool setInstrument(int channel, int bank, int program);
 
     bool isInitialized() const noexcept { return initialized; }
 

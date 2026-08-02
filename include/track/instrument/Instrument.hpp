@@ -3,6 +3,7 @@
 
 #include "audio_source/AudioSource.hpp"
 #include <string>
+#include "track/midi/MidiClipDAO.hpp"
 
 class Instrument : public AudioSource
 {
@@ -39,6 +40,18 @@ public:
     virtual void pitchBend(
         int channel, int value
     ) = 0;
+
+
+    void triggerMidiEvent(const MIDIEvent& event)
+    {
+        switch (event.message)
+        {
+            case MIDIMessage::NoteOn: noteOn(event.channel, event.data1, event.data2); break;
+            case MIDIMessage::NoteOff: noteOff(event.channel, event.data1); break;
+            case MIDIMessage::PitchBend: pitchBend(event.channel, event.data1); break;
+            default: break;
+        }
+    }
 
     void rename(const std::string& instrumentName) { name = instrumentName; }
     const std::string& getName() const { return name; }

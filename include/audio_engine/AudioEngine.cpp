@@ -6,7 +6,7 @@
 #include "track/midi/MidiMap.h"
 #include <string>
 // #include <memory>
-
+#include "track/MelodyMaker.hpp"
 
 
 // const std::string WAV_DIR{"include/track/metronome/dry-wood-block.wav"};
@@ -19,29 +19,33 @@ const std::string WAV_DIR{"/home/space_alyen/Downloads/Windows_XP.wav"};
 constexpr float GAIN = 0.7;
 
 AudioEngine::AudioEngine()
-    : sampleRate(44100.0), framesPerBuffer(256), sampleCounter(0),
+    : sampleRate(44100.0), framesPerBuffer(512), sampleCounter(0),
     player(WAV_DIR, 44100), reverb(300.0, 200.0, GAIN, 44100.0),
-    instrument(
+    instrument(std::make_shared<FSInstrument>(
         "FluidR3_GM",
         "/home/space_alyen/Music/Libraries/Soundfonts/FluidR3 GM + GS.sf2",
         512,
         44100
-    )
+    ))
 {
-    debug();
+    track = Debug::makeTrack(instrument);
+    track.togglePlayPause();
+    instrument->setInstrument(0, 0, 25);
 }
 
 AudioEngine::AudioEngine(double sr, unsigned long frames)
     : sampleRate(sr), framesPerBuffer(frames), sampleCounter(0),
     player(WAV_DIR, 44100), reverb(300.0, 200.0, GAIN, 44100.0),
-    instrument(
+    instrument(std::make_shared<FSInstrument>(
         "FluidR3_GM",
         "/home/space_alyen/Music/Libraries/Soundfonts/FluidR3 GM + GS.sf2",
         512,
         44100
-    )
+    ))
 {
-    debug();
+    track = Debug::makeTrack(instrument);
+    track.togglePlayPause();
+    instrument->setInstrument(0, 0, 25);
 }
 
 AudioEngine::~AudioEngine() noexcept
@@ -214,15 +218,7 @@ void AudioEngine::shutdown()
 
 void AudioEngine::debug()
 {
-    instrument.setInstrument(0, 0, 25);
-    notes.push_back(midiMap::C4);
-    notes.push_back(midiMap::D4);
-    notes.push_back(midiMap::E4);
-    notes.push_back(midiMap::F4);
-    notes.push_back(midiMap::G4);
-    notes.push_back(midiMap::A4);
-    notes.push_back(midiMap::B4);
-    notes.push_back(midiMap::C5);
+    instrument->setInstrument(0, 0, 25);
 }
 
 int AudioEngine::callback(
@@ -250,29 +246,14 @@ int AudioEngine::callback(
 
     for (unsigned long i = 0; i < framesPerBuffer; ++i)
     {
-        // Every second
-        if (state->sampleCounter % 44100 == 0)
+        // DAW Clock
+        if (state->sampleCounter >= 61)
         {
-            if (state->noteIndex > 0)
-            {
-                int previous =
-                    state->notes[(state->noteIndex - 1 + state->notes.size())
-                                % state->notes.size()];
-
-                state->instrument.noteOff(0, previous);
-            }
-
-            // Play next note
-            int note = state->notes[state->noteIndex];
-            state->instrument.noteOn(0, note, 100);
-
-            state->noteIndex =
-                (state->noteIndex + 1) % state->notes.size();
+            ++state->ticks;
+            state->sampleCounter = 0;
         }
         
-
-
-        float audio = state->instrument.generate();
+        float audio = state->track.generateSample(state->ticks);
 
         out[i * 2]     = audio;
         out[i * 2 + 1] = audio;

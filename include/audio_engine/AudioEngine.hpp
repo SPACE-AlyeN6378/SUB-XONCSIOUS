@@ -12,6 +12,7 @@
 #include <cstdint>
 
 #include "track/instrument/fluidsynth/FSInstrument.hpp"
+#include "track/MIDITrack.hpp"
 
 constexpr std::size_t MAX_DELAY = 48000;
 
@@ -143,14 +144,16 @@ private:
     double sampleRate {44100.0};
     unsigned long framesPerBuffer{256};
     uint64_t sampleCounter {0};
+
+    uint32_t ticks {0};
+
     bool initialized{false};
 
     AudioClipPlayer player;
     AudioFX::Reverb<8> reverb;
     
-    FSInstrument instrument;
-    std::vector<unsigned char> notes;
-    size_t noteIndex = 0;
+    std::shared_ptr<FSInstrument> instrument;
+    MidiTrack track;
 
     // FeedbackDelay<MAX_DELAY> fdR;
 

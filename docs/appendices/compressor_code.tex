@@ -1,0 +1,14 @@
+\section{Code for Processing Dynamic Compressor}
+\label{app:compressor_Code}
+
+The following code implements the dynamic compressor algorithm described in Section \ref{sec:compression}. 
+The code is written in C++ and is translated from the MATLAB implementation in the DAFX textbook 
+(\Cref{prompt:compressor_algorithm_cplusplus}) \cite{openai_chatgpt,dutilleux_nonlinear2011}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={process_compressor-process_compressor},
+    caption={The audio callback function showing how the time is measured},
+    label={lst:callback-time}
+]{../include/audio_fx/compressor/Compressor.cpp}
+

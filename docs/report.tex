@@ -69,16 +69,33 @@
 
 % ==================================================================
 
-% \maketitle    TODO: Uncomment after making the cover page
+% \maketitle    % TODO: Uncomment after making the cover page
+\include{00_opening/titlepage.tex}
+
+\pagenumbering{gobble}
+\include{00_opening/letter_of_transmittal.tex}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
 
 % \tableofcontents  TODO: Uncomment Table of Contents after finishing
 
-% \chapter{Introduction}
+% TODO: EXECUTIVE SUMMARY goes here
+
+\clearpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+% \section{Introduction}
 % \input{chapters/introduction}
 
 \section{Discussion}
 \input{discussion/audio_basics/00_audio_streaming.tex}
+\input{discussion/midi_instruments/midi_instrument.tex}
 \input{discussion/audio_effects/audio_effects.tex}
+\input{discussion/synth/synth.tex}
+\input{discussion/benchmark/evaluation.tex}
+
 
 % \chapter{Results}
 % \input{chapters/results}
@@ -93,7 +110,9 @@
     discussion/eq_filter/eq_filter,
     discussion/audio_effects/reverb/reverb,
     discussion/audio_basics/basics,
-    discussion/audio_effects/compression/compression
+    discussion/audio_effects/compression/compression,
+    discussion/synth/synth,
+    discussion/midi_instruments/instruments
 }
 
 \clearpage
@@ -116,6 +135,14 @@
 
 \clearpage
 \setcounter{page}{1}
+\include{appendices/synth_code.tex}
+
+\clearpage
+\setcounter{page}{1}
+\include{appendices/instrument_code.tex}
+
+\clearpage
+\setcounter{page}{1}
 \include{appendices/biquad_equations.tex}
 
 \clearpage
@@ -129,7 +156,6 @@
 \clearpage
 \setcounter{page}{1}
 \include{appendices/00_ai_prompts.tex}
-
 
 
 \end{document}

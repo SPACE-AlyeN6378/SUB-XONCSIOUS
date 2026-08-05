@@ -31,7 +31,7 @@ The Signalsmith's algorithm consists of the following stages \cite{luff2021rever
     such identifiable patterns from being recognized.
 \end{enumerate}
 
-To understand the subsystems, the following list utilizes a list of all-pass filters \cite{luff2021reverb}:
+To understand the subsystems, the following list utilizes some all-pass filters \cite{luff2021reverb}:
 \begin{itemize}
     \item \textbf{Multi-channel Delay}: Applies a forward time-shift to the output. The delay times are distinct and randomized
     for each channel, thus producing a spontaneous echo effect from all directions. 
@@ -48,6 +48,8 @@ A multi-channel delay is described by the following equation \cite{smith2010pasp
 \begin{equation}\label{eq:delay}
 y_i[n] = x_i[n - M_i]
 \end{equation}
+
+% TODO: Forgotten to put the equation for the choice of delay times d = 4V/s from Schroeder's paper
 
 Where $i$ is the channel number ($i \in \mathbb{Z}^{+}$), $n$ is the sample number ($n \in \mathbb{Z}^{+}$), and
 $M$ is the delay time (in samples). They should be mutually prime with each other, which prevents periodic coincidence with 

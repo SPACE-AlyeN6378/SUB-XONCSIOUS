@@ -1,0 +1,62 @@
+\section{Codes for the Synthesizer}
+\label{app:synth_Code}
+
+\subsection{Oscillator}
+
+The following header file below shows how the basic waveforms shapes are defined, which only consists
+of the four basic waveforms: Sine, Square, Sawtooth and Triangle. The samples depend on the location of the
+phase, between 0 and 1.
+
+\lstinputlisting[
+    style=cppstyle,
+    caption={Header file for defining the Oscillator shapes},
+    label={lst:oscshape}
+]{../include/audio_source/oscillator/OscShape.hpp}
+
+The following listing below shows how the program renders the oscillator signal and sent to the audio engine.
+The callback function is stateful, so everytime it runs, the phase variable moves on and recalculates the next
+sample \cite{openai_chatgpt}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={osc_generate-osc_generate},
+    caption={Stateful callback function for generating waveforms},
+    label={lst:osc_generate}
+]{../include/audio_source/oscillator/Oscillator.cpp}
+
+\subsection{State Variable Filter}
+\label{app:synth_code}
+
+The following listing show how the program updates parameters for resonance ($R = \frac{1}{2Q}$) and the
+coefficient, $g$ \eqref{eq:zdfsvf_g}. They perform only a simple arithmetic which potentially reduces
+computational cost to a greater extent compared to the Biquad.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={svf_setters-svf_setters},
+    caption={Stateful callback function for generating waveforms},
+    label={lst:svf_setters}
+]{../include/audio_fx/eq_filter/StateVariableFilter.cpp}
+
+This listing below represents Zavalshin's algorithm for the ZDF-SVF filter
+\cite{vafilterdesign2021}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={svf_process-svf_process},
+    caption={Stateful callback function for the ZDF-SVF Filter},
+    label={lst:svf_process}
+]{../include/audio_fx/eq_filter/StateVariableFilter.cpp}
+
+\subsection{Creating Unison}
+\label{app:unison_code}
+
+The following listing below shows a complete header file for forming unison from an 
+oscillator, as described in Section \ref{sec:unison}.
+
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={svf_process-svf_process},
+    caption={Class Structure for Creating Unison},
+    label={lst:unison}
+]{../include/track/instrument/osc_synth/Unison.hpp}

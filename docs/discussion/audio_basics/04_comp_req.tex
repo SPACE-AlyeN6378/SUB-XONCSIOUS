@@ -42,3 +42,7 @@ instead of an array or \texttt{std::vector}. The following equation determines t
 \end{equation}
 
 A larger standard deviation indicates larger variations in time, which means more jitter.
+
+\Cref{app:exec_time}, Listing \ref{lst:raii-timer} shows another way of measuring time, which utilizes the RAII (Resource Acquisition Is Initialization)
+technique by taking the start and end times at the constructor and destructor, and calculating the elasped time
+after the object is destroyed \cite{nagi2026timingcpp}.

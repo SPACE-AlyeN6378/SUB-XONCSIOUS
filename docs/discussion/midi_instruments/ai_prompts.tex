@@ -1,3 +1,25 @@
-\promptitem{prompt:absinstrument_codegen}{% ChatGPT
-    ``Let's make Instrument an abstract class for now, which will be extended by Synthesizer (oscillator), Fluidsynth and sfizz.''
+\promptitem{prompt:inst_using_ptrs}{% ChatGPT
+    ``Ok, now here's my header file for the MIDI Track. I don't understand why it's not accepting an abstract class Instrument. Should I use template?
+    
+    \textit{Code pasted below}
+
+    Also on second thought, if fluidsynth is used, multiple midi tracks might share that instrument. Instead, should I use a unique ptr or shared ptr or reference?''
 }
+
+\promptitem{prompt:render_block_reason}{% ChatGPT
+    ``Why do we need a render block for FSInstrument and SFZInstrument?''
+}
+
+
+\promptitem{prompt:sfz_render_code}{
+    I am creating an SFZInstrument class using sfizz. The class inherits from 
+    Instrument and needs to generate audio samples for PortAudio. How should I 
+    implement a render() function and a generate() function 
+    that outputs one mono sample at a time?
+}
+
+\promptitem{prompt:creating_fs_class}{
+    ``Just generate the class for Fluidsynth instrument. Just note on/off, 
+    render, generate, load and reset''
+}
+

@@ -1,0 +1,110 @@
+\subsubsection{Unison \& Polyphony}
+\label{sec:unison}
+
+The unison effect generates multiple voices of the same sound, each slightly detuned,
+therefore creating a richer and thicker sound.  Referring from other oscillator-based synthesizers,
+for e.g. Xfer Serum, the equation for creating unison voices can be modelled like this, 
+with $x[n]$ as the input oscillator of any shape and frequency:
+
+\begin{equation}
+    y[n] = A_c x[n] + A_s \sum_{k=1}^{N} \left( x\left[ n f(d, k) - \phi_k \right]
+            +  x\left[ n f(-d, k) - \phi_k \right] \right)
+\end{equation}
+
+Where $A_c$ is the amplitude of the centre voice and $A_s$ is the amplitude of the 
+side voices. $f(k)$ is the detune factor for the frequency, $d$ is the detune amount (how 
+far the frequencies are detuned from each other), and $\phi$ is the phase shift as described in 
+\eqref{eq:unison_phase}.
+
+The detune factor is described using the following equation:
+
+\begin{equation}\label{eq:cent_frequency}
+f(d, k) = 2^\frac{dk}{1200}
+\end{equation}
+
+Where $k$ is the cent value, which defines the logarithmic unit in music. Szabo's paper makes a discussion
+that the detuned frequency changes non-linearly with the interval length, $d$ \cite{szabo_supersaw}. 
+Since there is no documentation published online, using this equation for detuning \eqref{eq:cent_frequency}
+would be valid (\Cref{prompt:unison_detune}) \cite{openai_chatgpt}. Also adding a cent value add a slight, insignificant
+change in the frequency without altering the perceived pitch, allowing multiple voices to remain sounding natural.
+
+Regarding the design of blending of the voices, the empirical analysis of the Roland JP-8000
+in Szabo's paper suggests that the centre oscillator must decrease proportionally along
+with the increase in side oscillator counterparts \cite{szabo_supersaw}, to ensure proper
+distribution of energy, when the voices are spreading.
+
+After the oscillator wave is splitted into voices, an equation using energy conservation is derived,
+given that the power, $P \propto A^2$ (\Cref{prompt:unison_gainblend}) \cite{anthropicclaude}, 
+
+\begin{equation}\label{eq:unison_energyconserv}
+(A_c)^2 + (N-1)(A_s)^2 = 1
+\end{equation}
+
+where $N$ is the total number of voices.
+
+The blending factor, $b$ where $0 \leq b \leq 1$ is applied to the power space, which makes
+$P_c = (A_c)^2 = 1 - b$.
+
+$$
+1 - b + N(A_s)^2 = 1
+$$
+
+\begin{equation}\label{eq:unison_equalpower}
+\therefore A_s = \sqrt{\frac{b}{N-1}}, \qquad A_c = \sqrt{1 - b}
+\end{equation}
+
+This equation is only applicable for odd-numbered voices. For even numbered voices with two
+centre voices, 
+
+\begin{equation}\label{eq:unison_energyconserveven}
+2(A_c)^2 + (N-1)(A_s)^2 = 1
+\end{equation}
+
+After expressing $P_c = 2(A_c)^2 = 1 - b$, the following is obtained:
+\begin{equation}\label{eq:unison_equalpower_even}
+\therefore A_s = \sqrt{\frac{b}{N-2}}, \qquad A_c = \sqrt{ \frac{1 - b}{2} }
+\end{equation}
+
+These equations can also be derived using the wave superposition properties that the sum of 
+all the amplitudes of waves must equal the amplitude of the input.
+
+\begin{equation}\label{eq:unison_wavesuperpos}
+A_c + NA_s = 1
+\end{equation}
+
+This time, $b$ is applied in the amplitude domain, where $A_c = 1 - b$.
+$$
+1 - b + NA_s = 1
+$$
+
+\begin{equation}\label{eq:unison_linearmode}
+\therefore A_s = \frac{b}{N}, \qquad A_c = 1 - b
+\end{equation}
+
+The linear blend equation \eqref{eq:unison_linearmode} makes it more intuitive and easy to implement, but unlike the equal-power
+counterpart \eqref{eq:unison_equalpower}, it doesn't preserve total signal power across the blending range, and leads to 
+perceived loudness \cite{anthropicclaude}. Even though Szabo's Roland instrument demonstrated exponential blend, it is not power-preserving
+and that the side voices stay softened. Therefore, with that being mentioned it is safe to conclude that the equal-power blend provides
+the most robust solution, even though it can be switched in the next version.
+
+On the other hand, the phase change, $\phi$ is assigned randomly as described in Szabo's paper, and is defined by the following:
+
+\begin{equation}\label{eq:unison_phase}
+    \phi_i \sim \mathcal{U}\!\left(0,\,2\pi\lambda\right), \qquad 0 < \lambda \leq 1
+\end{equation}
+
+The adjustable scalar parameter $\lambda$ controls the boundary within which the values can be assigned. $\lambda = 0$ provides consistent
+phases, whereas $\lambda = 1$ gives maximum variation. The greater the variation, the more natural and organic the synth sounds \cite{szabo_supersaw}.
+
+However, to test the perceptual quality of the sound, a sawtooth wave is passed into the system, which then duplicates into 3 voices,
+detuned for about 10 cents from each other, and a gain ratio of 0.7. Starting with a low blending factor $b$, it produced a richer, thicker sound 
+but the beats produced clipping artifacts, which is unexpected. The following table shows how the sound quality is
+optimized through adjusting specific parameters.
+
+\input{discussion/synth/tables/observation_table.tex}
+
+Therfore, it can be concluded that the unison produces expected result, if the gain is reduced
+to prevent any clippings driven by beating. But the quality can further be improved either
+by rearranging the shifts in another way or by spreading the voices throughout stereo output, 
+since it's currently working in mono, which can reduce wobbly beating effect. Code listing is included
+under \Cref{app:unison_code}.

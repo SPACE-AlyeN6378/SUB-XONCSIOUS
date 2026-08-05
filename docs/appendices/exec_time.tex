@@ -61,3 +61,13 @@ double AudioEngine::getStdDevCallbackTimeUs() const noexcept
     return std::sqrt(variance);
 }
 \end{lstlisting}
+
+And lastly, the following header file shows the timer adapted using RAII method, and it is
+designed to work outside the audio engine in a more convenient way \cite{nagi2026timingcpp}.
+
+\lstinputlisting[
+    style=cppstyle,
+    % linerange={process_delay-process_delay},
+    caption={Timer for Measuring Elasped Time using RAII},
+    label={lst:raii-timer}
+]{../include/misc/Timer.hpp}

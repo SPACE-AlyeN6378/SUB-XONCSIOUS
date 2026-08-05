@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+    \centering
+    \caption{Processing Time Measurements of Audio Components}
+    \label{tab:audio_component_benchmark}
+    \begin{tabular}{lrrr}
+        \toprule
+        \textbf{Component} & 
+        \textbf{Mean ($\mu$s)} & 
+        \textbf{Max ($\mu$s)} & 
+        \textbf{Std. Dev. ($\mu$s)} \\
+        \midrule
+        WAV Audio Streaming & 24.274 & 52.380 & 3.140 \\
+        Fluidsynth Rendering & 36.882 & 80.725 & 6.763 \\
+        Osc-based Synthesizer & 57.318 & 126.401 & 18.355 \\
+        SFZ Rendering & 19.752 & 47.370 & 4.005 \\
+        RBJ Biquad Processing & 13.761 & 60.452 & 3.540 \\
+        RBJ Biquad Parameter Change & 50.243 & 121.524 & 20.831 \\
+        SVF Filter Sweeping & 41.585 & 180.045 & 14.300 \\
+        Reverb & 810.875 & 1580.370 & 106.859 \\
+        Compressor & 28.728 & 86.100 & 12.551 \\
+        Echo/Delay & 7.795 & 30.291 & 4.884 \\
+        \bottomrule
+    \end{tabular}
+\end{table}

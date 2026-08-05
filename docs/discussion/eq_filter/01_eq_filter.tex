@@ -10,7 +10,8 @@ due to high computational cost and/or latency, beccause FIR requires fewer delay
 filter implemented in the audio engine is the Biquad Filter, which is a second-order Infinite Impulse Response (IIR) 
 filter \cite{smith_biquad}. 
 
-The filter design is based on the Audio EQ Cookbook by Robert Bristow-Johnson (RBJ) \cite{cookbook}, which provides
+The filter design is based on the biquadratic filter \cite{vanWaterschootT.2007APPT} 
+using the Robert Bristow-Johnson (RBJ) method \cite{cookbook} to calculate
 coefficient equations for every filter responses, including low-pass, high-pass, etc. This cookbook derives these
 coefficients from the analog prototypes and had been digitized using Bilinear Transform. The following transfer
 function shows the equation of the Biquad Filter \cite{cookbook}.
@@ -36,8 +37,7 @@ audio samples are processed.
 These coefficients are dependent on parameters, such as cutoff frequency ($f_s$), quality factor $Q$, 
 and the slope ($S$) (only applicable for shelving filters), and the calculation is done separately from sample
 processing. During real-time processing, the program only handles the difference equation, unless the parameters
-are automated. Please check Appendix X for the list of equations and its corresponding code implementation.
-% TODO: Please make this Appendix
+are automated. Please check \Cref{app:biquad_equations} for the list of equations and its corresponding code implementation.
 
 After the implementation, unit tests were performed using the Catch2 testing framework \cite{catch2} to verify that the
 coefficient calculation produced the expected results taken from a Biquad Filter Calculator from CMUSE \cite{cmuse2026biquad}. 
@@ -60,11 +60,10 @@ The resulting gain ratio, expressed in decibels, was plotted against frequency t
 and compared against the theoretical frequency response using the Biquad calculator from 
 EarLevel \cite{redmon2021biquad}. Figure \ref{fig:rbj_bode_plot} shows a Bode Plot of the Peaking EQ at cutoff frequency ($f_s$) 
 \SI{1200}{\hertz}, quality factor $Q = 1$, and gain of +\SI{6}{\decibel}, which produced the expected result.
-% After creating an Appendix for Code, please include a code listing for calculating RMS and plotting
 
 \input{discussion/eq_filter/figures/rbj_bode_plot.tex}
 
 Since this equation provides flexibility and a wide variety of shapes and sizes for each filter response
 including peaking, shelving, low-pass, high-pass, notch, and band-pass responses,
-Biquad filter is chosen for creating Parametric equalizers (\cref{prompt:parametric_eq}) \cite{openai_chatgpt,cookbook}, 
-which are commonly used in many DAWs and VST Plugins \cite{fox2021parametriceq}.
+Biquad filter is chosen for creating Parametric equalizers (\cref{prompt:parametric_eq}) 
+\cite{openai_chatgpt,vanWaterschootT.2007APPT}.

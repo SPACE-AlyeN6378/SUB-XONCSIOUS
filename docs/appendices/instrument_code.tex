@@ -1,0 +1,26 @@
+\section{Codes For Third-Party Synth}
+\label{app:fs_sfz_render}
+
+\subsection{SFZ Rendering}
+
+The following code below utilizes the sfizz library to render samples,
+whenever this synth engine is streaming (\Cref{prompt:sfz_render_code}) \cite{openai_chatgpt}.
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={sfz_render-sfz_render},
+    caption={Callback methods for Rendering and generating SFZ output},
+    label={lst:sfz_render}
+]{../include/track/instrument/sfz/SFZInstrument.cpp}
+
+
+\subsection{Fluidsynth Rendering}
+
+The following code use the FluidSynth API to render samples (\Cref{prompt:creating_fs_class}) \cite{openai_chatgpt}:
+
+\lstinputlisting[
+    style=cppstyle,
+    linerange={fs_render-fs_render},
+    caption={Callback methods for Rendering and generating FluidSynth output},
+    label={lst:fs_render}
+]{../include/track/instrument/fluidsynth/FSInstrument.cpp}

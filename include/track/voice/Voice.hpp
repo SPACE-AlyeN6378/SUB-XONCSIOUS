@@ -1,7 +1,7 @@
 #ifndef VOICE_HPP
 #define VOICE_HPP
 
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 #include <cstdint>
 
 /**

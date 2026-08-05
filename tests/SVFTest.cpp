@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 #include "audio_fx/eq_filter/StateVariableFilter.hpp"
 #define ENABLE_PLOTTING 0
 

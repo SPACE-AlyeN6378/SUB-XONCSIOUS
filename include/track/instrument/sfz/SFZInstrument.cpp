@@ -3,9 +3,6 @@
 SFZInstrument::SFZInstrument()
 :
     synth(nullptr),
-    leftBuffer(512, 0.0f),
-    rightBuffer(512, 0.0f),
-    readIndex(0),
     loaded(false)
 {
 }
@@ -19,10 +16,7 @@ SFZInstrument::SFZInstrument(
 :
     Instrument(instrumentName, blockSize_, sampleRate),
     synth(nullptr),
-    loaded(false),
-    leftBuffer(blockSize_, 0.0f),
-    rightBuffer(blockSize_, 0.0f),
-    readIndex(0)
+    loaded(false)
 {
     synth = sfizz_create_synth();
     if (!synth) return;
@@ -55,6 +49,7 @@ void SFZInstrument::pitchBend(int channel, int value)
     sfizz_send_pitch_wheel(synth, 0, value);
 }
 
+// <*sfz_render>
 void SFZInstrument::render()
 {
     float* outputs[2] = {
@@ -89,7 +84,7 @@ float SFZInstrument::generate()
 
     return sample;
 }
-
+// </sfz_render>
 
 void SFZInstrument::reset()
 {

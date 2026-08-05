@@ -12,6 +12,7 @@
 #include <cstdint>
 
 #include "track/instrument/fluidsynth/FSInstrument.hpp"
+#include "track/instrument/osc_synth/Unison.hpp"
 #include "track/MIDITrack.hpp"
 
 constexpr std::size_t MAX_DELAY = 48000;
@@ -154,6 +155,7 @@ private:
     
     std::shared_ptr<FSInstrument> instrument;
     MidiTrack track;
+
 
     // FeedbackDelay<MAX_DELAY> fdR;
 

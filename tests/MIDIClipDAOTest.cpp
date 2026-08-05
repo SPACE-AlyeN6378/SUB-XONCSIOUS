@@ -3,7 +3,7 @@
 
 #include "track/midi/MidiClipDAO.hpp"
 #include "track/midi/MusicNote.hpp"
-#include "MelodyMaker.hpp"   // Your header containing Debug::makeTrack
+#include "track/MelodyMaker.hpp"   // Your header containing Debug::makeTrack
 
 
 TEST_CASE("MidiClip can add and retrieve notes", "[MidiClip]")

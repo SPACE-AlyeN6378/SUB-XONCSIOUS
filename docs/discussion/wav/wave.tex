@@ -1,0 +1,15 @@
+\subsection{WAV File Import and Streaming}
+
+Importing audio samples from a WAV file requires decoding WAV file data
+to extract a data type compatible with the real-time audio engine,
+without introducing any unwanted latency.
+
+The WAV files (\texttt{*.wav}) are basically wave files in RIFF format,
+and uses the simplest approach, i.e. extracting samples using \texttt{libsndfile} 
+library built into Linux, and then storing them to a \texttt{std::vector}. If the 
+sampling rate of the extracted audio does not match the engine's sample rate, 
+the algorithm either downsamples it when it's too high, or upsamples it when it's too low,
+when the audio engine renders the sample during real-time playback.
+The upsampling is done using linear interpolation as of now.
+
+The full listing of the \texttt{*.cpp} file is included in \Cref{app:wav-streaming}.

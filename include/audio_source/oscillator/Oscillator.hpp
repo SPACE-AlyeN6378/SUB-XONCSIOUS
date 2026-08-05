@@ -1,7 +1,7 @@
 #ifndef OSCILLATOR_HPP
 #define OSCILLATOR_HPP
 #include "OscShape.hpp"
-#include "AudioSource.hpp"
+#include "../AudioSource.hpp"
 #include <atomic>
 
 /* Cached oscillator parameters used by the audio thread.
@@ -18,7 +18,12 @@ class Oscillator : public AudioSource
 {
 public:
     // Constructor
+    Oscillator();
     Oscillator(OscShape shape, double frequency, float amplitude, double sampleRate);
+    Oscillator(const Oscillator&) = delete;
+    Oscillator& operator=(const Oscillator&) = delete;
+    Oscillator(Oscillator&& other) noexcept;
+    Oscillator& operator=(Oscillator&& other) noexcept;
 
     // ******** Getters ********
 
@@ -37,6 +42,22 @@ public:
      * @brief Updates the amplitude done by a user or program.
     */
     void setAmplitude(double a) noexcept;
+
+    /**
+     * @brief Changes the shape of the oscillator
+    */
+    void setShape(OscShape sh) noexcept;
+
+    /**
+     * @brief Phase shifts the oscillator
+    */
+    void setPhase(double phase);
+
+    /**
+     * @brief Updates the sample rate
+    */
+    void setSampleRate(double sampleRate_) noexcept;
+
 
     /**
      * @brief Updates the oscillator’s internal cached state from shared parameters.
@@ -73,10 +94,8 @@ private:
     OscCache cache;
 
     // FUTURE CONSIDERATIONS:
-    /*
-    - Support for wave shape changing in real-time
-    - Add support for frequency modulation (FM) and amplitude modulation (AM)
-    */
+    // - Support for wave shape changing in real-time
+    // - Add support for frequency modulation (FM) and amplitude modulation (AM)
 };
 
 #endif // OSCILLATOR_HPP

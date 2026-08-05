@@ -9,7 +9,8 @@ class Instrument : public AudioSource
 {
 public:
     Instrument() : name("Untitled Instrument"), engineSampleRate(44100.0),
-                    blockSize(512)
+                    blockSize(512), leftBuffer(512, 0.0f),
+                    rightBuffer(512, 0.0f), readIndex(0)
     {
     }
 
@@ -20,8 +21,10 @@ public:
     )
         : name(instrumentName), 
         blockSize(blockSize_),
-        engineSampleRate(sampleRate)
-        
+        engineSampleRate(sampleRate),
+        leftBuffer(blockSize_, 0.0f),
+        rightBuffer(blockSize_, 0.0f),
+        readIndex(0)
     { 
     }
 
@@ -40,6 +43,10 @@ public:
     virtual void pitchBend(
         int channel, int value
     ) = 0;
+
+
+    // Render audio block
+    virtual void render() = 0;
 
 
     void triggerMidiEvent(const MIDIEvent& event)
@@ -61,6 +68,13 @@ protected:
     std::string name;
     double engineSampleRate;
     std::size_t blockSize;
+
+    // Output buffers
+    std::vector<float> leftBuffer;
+    std::vector<float> rightBuffer;
+
+    // Current read position
+    int readIndex;
 };
 
 #endif  // INSTRUMENT_HPP

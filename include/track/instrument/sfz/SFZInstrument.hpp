@@ -45,7 +45,7 @@ public:
     void pitchBend(int channel, int value) override;
 
     // Render audio block
-    void render();
+    void render() override;
 
 
     bool isLoaded() const { return loaded; };
@@ -56,14 +56,6 @@ private:
     sfizz_synth_t* synth;
 
     bool loaded;
-
-    // Output buffers
-    std::vector<float> leftBuffer;
-    std::vector<float> rightBuffer;
-
-
-    // Current read position
-    int readIndex;
 };
 
 #endif  // SFZ_INSTRUMENT_HPP

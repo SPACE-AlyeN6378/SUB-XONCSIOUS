@@ -5,7 +5,7 @@
 #include <alsa/asoundlib.h>
 #include "track/midi/MidiMap.h"
 #include <string>
-// #include <memory>
+#include <memory>
 #include "track/MelodyMaker.hpp"
 
 

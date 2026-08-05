@@ -37,10 +37,12 @@ public:
     void noteOff(int channel, int note);
     void pitchBend(int channel, int value);
 
+    bool setInstrument(int channel, int bank, int program);
+
     void reset() override;
 
     // Render a block of samples
-    void render(float* left, float* right, int frames);
+    void render() override;
 
     // AudioSource interface
     float generate() override;
@@ -57,11 +59,6 @@ private:
     fluid_synth_t* synth = nullptr;
 
     double sampleRate;
-
-    std::vector<float> leftBuffer;
-    std::vector<float> rightBuffer;
-
-    size_t bufferIndex;
 
     bool initialized;
 };

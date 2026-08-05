@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 #include "audio_fx/eq_filter/BiQuadFilter.hpp"
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 
 using Signal = std::vector<float>;
 

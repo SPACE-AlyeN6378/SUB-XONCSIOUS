@@ -18,6 +18,7 @@ StateVariableFilter::StateVariableFilter(float cutoff, float Q, float fs)
     setCutoff(cutoff);
 }
 
+// <*svf_setters>
 void StateVariableFilter::setCutoff(float cutoff)
 {
     g = std::tan(std::numbers::pi_v<float> * cutoff / sampleRate); 
@@ -27,12 +28,14 @@ void StateVariableFilter::setResonance(float Q)
 {
     R = 1.0f / (2.0f * Q);
 }
+// </svf_setters>
 
 void StateVariableFilter::setOutputMode(FilterType mode)
 {
     outputMode = mode;
 }
 
+// <*svf_process>
 void StateVariableFilter::process(float input)
 {
     // Reference: https://synthengineer.com/blog/zero-delay-feedback-filters
@@ -51,6 +54,7 @@ void StateVariableFilter::process(float input)
     state1 = bp + v1;
     state2 = lp + v2;
 }
+// </svf_process>
 
 void StateVariableFilter::reset()
 {

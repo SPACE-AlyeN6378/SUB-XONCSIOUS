@@ -1,5 +1,5 @@
 #include "audio_fx/compressor/Compressor.hpp"
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 #include <fstream>
 #include <iostream>
 

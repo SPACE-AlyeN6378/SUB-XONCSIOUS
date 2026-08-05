@@ -5,9 +5,6 @@
 
 FSInstrument::FSInstrument()
 :
-    leftBuffer(512, 0.0f),
-    rightBuffer(512, 0.0f),
-    bufferIndex(0),
     initialized(false)
 {
     settings = new_fluid_settings();
@@ -30,9 +27,7 @@ FSInstrument::FSInstrument(
 )
     :
     Instrument(instrumentName, blockSize_, sampleRate), 
-    sampleRate(sampleRate),
-    leftBuffer(blockSize_, 0.0f),
-    rightBuffer(blockSize_, 0.0f)
+    sampleRate(sampleRate)
 {
     settings = new_fluid_settings();
 
@@ -104,49 +99,56 @@ void FSInstrument::reset()
 
     fluid_synth_system_reset(synth);
 
-    bufferIndex = 0;
+    readIndex = 0;
 
     std::fill(leftBuffer.begin(), leftBuffer.end(), 0.0f);
     std::fill(rightBuffer.begin(), rightBuffer.end(), 0.0f);
 }
 
-
-void FSInstrument::render(float* left, float* right, int frames)
+// <*fs_render>
+void FSInstrument::render()
 {
     if (!synth)
     {
-        std::fill(left, left + frames, 0.0f);
-        std::fill(right, right + frames, 0.0f);
+        std::fill(leftBuffer.begin(), leftBuffer.end(), 0.0f);
+        std::fill(rightBuffer.begin(), rightBuffer.end(), 0.0f);
+        readIndex = 0;
         return;
     }
 
-    fluid_synth_write_float(synth, frames, left, 0, 1, right, 0, 1);
-}
+    fluid_synth_write_float(
+        synth,
+        static_cast<int>(blockSize),
+        leftBuffer.data(),
+        0,
+        1,
+        rightBuffer.data(),
+        0,
+        1
+    );
 
+    readIndex = 0;
+}
 
 float FSInstrument::generate()
 {
-    if (bufferIndex >= blockSize)
+    if (readIndex >= blockSize)
     {
-        render(
-            leftBuffer.data(), rightBuffer.data(), blockSize
-        );
-
-        bufferIndex = 0;
+        render();
     }
 
     // AudioSource only returns one float,
     // so downmix to mono for now
     float sample = downmixToMono(
-        leftBuffer[bufferIndex],
-        rightBuffer[bufferIndex]
+        leftBuffer[readIndex],
+        rightBuffer[readIndex]
     );
 
-    ++bufferIndex;
+    ++readIndex;
 
     return sample * 2.0f;
 }
-
+// </fs_render>
 
 bool FSInstrument::setInstrument(
     int channel,

@@ -3,7 +3,7 @@
 #include <vector>
 #include <fstream>
 
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 #include "audio_fx/eq_filter/StateVariableFilter.hpp"
 #include "audio_fx/eq_filter/FilterTypeEnum.hpp"
 

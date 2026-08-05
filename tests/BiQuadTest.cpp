@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
-#include "audio_source/Oscillator.hpp"
+#include "audio_source/oscillator/Oscillator.hpp"
 #include "audio_fx/eq_filter/BiQuadFilter.hpp"
 #include "misc/BodePlot.hpp"
 
@@ -84,9 +84,14 @@ TEST_CASE("Biquad Peaking EQ coefficients")
     REQUIRE(c.a1 == Catch::Approx(-1.769718979));
     REQUIRE(c.a2 == Catch::Approx(0.832147905));
 
-    filter.setPeaking(1200.0, 1.0, 6.0);
+    filter.setPeaking(5000.0, 1.0, 4.0);
     BodePlot::plot(filter);
 }
+
+// TEST_CASE("Biquad Peaking EQ coefficients")
+// {
+
+// }
 
 TEST_CASE("Biquad Low Shelf coefficients")
 {

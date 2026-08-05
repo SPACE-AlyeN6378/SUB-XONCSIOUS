@@ -16,7 +16,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # -------------------------------------------------
 # Oscillator library
 # -------------------------------------------------
-add_library(oscillator include/audio_source/Oscillator.cpp)
+add_library(oscillator include/audio_source/oscillator/Oscillator.cpp)
 target_include_directories(oscillator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 # -------------------------------------------------
@@ -25,6 +25,13 @@ target_include_directories(oscillator PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(clip_player include/audio_source/audio_clip/AudioClipPlayer.cpp)
 target_include_directories(clip_player PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(clip_player PUBLIC sndfile)
+
+# -------------------------------------------------
+# Audio Clip Player Library
+# -------------------------------------------------
+add_library(clip_exporter include/audio_source/audio_clip/AudioClipExporter.cpp)
+target_include_directories(clip_exporter PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(clip_exporter PUBLIC sndfile)
 
 # -------------------------------------------------
 # Sforzando Library
@@ -139,6 +146,9 @@ add_executable(AudioTest tests/AudioEngineTest.cpp)
 add_executable(ReverbTest tests/ReverbTest.cpp)
 add_executable(MidiDAOTest tests/MIDIClipDAOTest.cpp)
 add_executable(CompressorTest tests/CompressorTest.cpp)
+add_executable(SynthTest tests/SynthTest.cpp)
+
+add_executable(MeasureTime tests/timer_measurements/MeasureTime.cpp)
 
 # Link the required libraries to each executable
 target_link_libraries(SVFTest PRIVATE oscillator svf Catch2::Catch2WithMain)
@@ -148,4 +158,10 @@ target_link_libraries(ReverbTest PRIVATE reverb Catch2::Catch2WithMain)
 target_link_libraries(AudioTest PRIVATE audio_engine)
 target_link_libraries(MidiDAOTest PRIVATE midi_track Catch2::Catch2WithMain)
 target_link_libraries(CompressorTest PRIVATE oscillator compressor)
+target_link_libraries(SynthTest PRIVATE oscillator clip_exporter)
+
+target_link_libraries(MeasureTime PRIVATE 
+    fs_instrument sfz_instrument clip_exporter midi_track oscillator
+    svf biquad compressor reverb clip_player feedback_delay
+)
 

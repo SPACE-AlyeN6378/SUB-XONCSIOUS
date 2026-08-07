@@ -1,15 +1,40 @@
-\section{Recommendations}
+\section{Recommendations and Future Work}
+
+It is highly recommended that a professional music project needs to be produced before testing them carefully, 
+either by measuring callback execution time, or by monitoring CPU and RAM usage offered by the operating system, which is a 
+better approach.
+It is also recommended that the software is tested under various computer hardware specification, from lower-grade to
+higher-grade.
+
+Since software is not a physical resource, it can be created, deleted or modified without any additional cost 
+(e.g. cost of materials).
+Therefore they always keep evolving. When new or better solutions are found through enormous amount of research, 
+they are either added and/or can replace currently existing solution, which could promise better results.
+
+The digital audio workstation (DAW) is a very large-scale project, and it takes months or years of research and
+development to complete the project as a solo developer. These kinds of large-scale software are often developed
+by a team of programmers, audio designers, and DSP specialists, with their own area of expertise so that the job
+can be done much faster using division of labour.
+Which is why for starters, joining a community of audio developers (e.g. UVic CMCU),
+attending conferences, and working on a project with them is highly encouraged. It even bring in to mentorship and guidance which
+can go beyond primary/peer-reviewed sources, it order to achieve better and more efficient outcome.
+
+In the meantime, some additional features can be added to this project. For e.g., 
+ADSR (Attack, Decay, Sustain, Release), LFO (Low-frequency oscillation), compressor
+sidechaining, stereo support, Arpeggiator, etc. Also that the Qt GUI is yet to be implemented, since every
+DAW is equipped with a user interface that allows producers
+to intuitively control parameters, display waveforms, drum rack for beat patterns, FFT-based spectrum analyzer, etc.,
+Also, the sample generators currently generate one sample
+at a time, and PortAudio accepts blocks of samples. Therefore, copying a block of memory
+instead of storing them to a buffer sample-by-sample might improve the performance to a much
+greater extent.
+
+And finally, if a multi-threadeded architecure is employed to the DAW, it would be a good practice to implement 
+Consumer-Producer Queue \cite{susser_adc2025} to prevent such resource contention.
+
 
 % - Adding improvements previously mentioned in the Discussion section, 
 % such as sending blocks directly to the audio engine instead of going sample-by-sample
 % Supporting stereo sounds to mitigate beating effects
 % ADSR, LFO, compressor sidechains, 
-% Real stress test comes from testing a fully functional application with everything working together
-% Recommended that a professional music/sound design project is produced before and then tested carefully
-% Use Resource Monitor to check CPU and Memory usage
-% Software keeps evolving; any modular solutions can be replaced
-% Project can be done much faster --> teamwork
-% Join community, conferences showcase
-% Lastly, SF2 downloaded from musical artifacts, many of which are not allowed for commerical use,
-% might lead to copyright infringement; only intended for experimental purposes 
-% Testing in various hardware specifications
+

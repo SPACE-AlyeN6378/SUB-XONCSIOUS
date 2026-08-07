@@ -6,6 +6,7 @@
 
 % ---------- Appendix ----------
 \usepackage{titlesec}
+\usepackage[toc]{appendix}
 
 % ---------- Encoding ----------
 \usepackage[T1]{fontenc}
@@ -15,6 +16,11 @@
 \usepackage{amsmath,amssymb}
 \numberwithin{equation}{section}
 \usepackage{siunitx}      % Units (Hz, dB, ms)
+
+% ---------- Glossary -----------
+\usepackage[nonumberlist]{glossaries}
+\makeglossaries
+\input{glossary/glossary.tex}
 
 % ---------- Graphics ----------
 \usepackage{graphicx}
@@ -59,11 +65,9 @@
 \crefformat{promptcounter}{\textit{Prompt~#2#1#3}}
 \Crefformat{promptcounter}{\textit{Prompt~#2#1#3}}
 
-% ----------- Title Page ------------
 
-% \title{Title of Your Report}
-% \author{Your Name}
-% \date{\today}
+
+
 
 \begin{document}
 
@@ -74,51 +78,76 @@
 
 \pagenumbering{gobble}
 \include{00_opening/letter_of_transmittal.tex}
-\clearpage
-\pagenumbering{arabic}
-\setcounter{page}{1}
 
-% \tableofcontents  TODO: Uncomment Table of Contents after finishing
-
-% TODO: EXECUTIVE SUMMARY goes here
 
 \clearpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\include{00_opening/exec_summary.tex}
+
+\clearpage
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
-% \section{Introduction}
+\include{01_introduction/00_intro.tex}
 % \input{chapters/introduction}
 
 \section{Discussion}
+
+This section provides some justifications for how each components are constructed
+in the project with some arguments and supporting facts. For any audio effects, the equations 
+and algorithms are justified and tested for each of the components. And then the results are tested 
+perceptually and analyzed for correctness.
+
 \input{discussion/audio_basics/00_audio_streaming.tex}
 \input{discussion/wav/wave.tex}
 \input{discussion/midi_instruments/midi_instrument.tex}
 \input{discussion/audio_effects/audio_effects.tex}
 \input{discussion/synth/synth.tex}
+\pagebreak
 \input{discussion/benchmark/evaluation.tex}
 
 
-% \chapter{Results}
-% \input{chapters/results}
+\include{conclusion/conclusion.tex}
 
-% \chapter{Conclusion}
-% \input{chapters/conclusion}
+\pagebreak
+
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{
-    generative_ai, 
-    libraries, 
+    01_introduction/introduction,
+    discussion/midi_instruments/instruments,
     discussion/eq_filter/eq_filter,
     discussion/audio_effects/reverb/reverb,
     discussion/audio_basics/basics,
     discussion/audio_effects/compression/compression,
     discussion/synth/synth,
-    discussion/midi_instruments/instruments
+    generative_ai,
+    libraries
 }
+
+\pagebreak
+
+% \section*{Glossary}
+\glsaddall
+\printglossary
 
 \clearpage
 
 \appendix
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{section}{Appendices}
+\mbox{}
+\newpage
+
 \crefname{section}{Appendix}{Appendices}
 \Crefname{section}{Appendix}{Appendices}
 
@@ -162,5 +191,5 @@
 \setcounter{page}{1}
 \include{appendices/00_ai_prompts.tex}
 
-
+% \end{appendices}
 \end{document}

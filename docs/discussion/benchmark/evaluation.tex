@@ -3,21 +3,20 @@
 
 Since the development of the project is currently underway, the mixer has not been developed yet,
 which is essential for getting all the components working together for stress test. In the meantime, 
-the callback execution times for each components are measured using the RAII timer (Appendix) outside 
-the audio engine, and a buffer size of 512 floats, and a sample rate $f_s = $ \SI{44100}{\hertz}. 
+the callback execution times for each components are measured using the RAII timer (\Cref{app:exec_time}, Listing \ref{lst:raii-timer}) outside 
+the audio engine. A buffer size of 512 floats, and a sample rate $f_s = $ \SI{44100}{\hertz} is used. 
 
 The buffer latency is,
-$$\frac{512}{44100} \approx 11.61\, ms$$
+$$\frac{512}{44100} \approx 11.61\, \text{ms}$$
 
 Multiple measurements of the execution time are taken using the timer code in \Cref{app:exec_time}, Listing \ref{lst:raii-timer}, 
 and the statistical results for each of the components are tabulated in \Cref{tab:audio_component_benchmark}.
-% TODO: Add the code for the timer
 
 \subsubsection{Measurement Results}
 
 \input{discussion/benchmark/tables/components.tex}
 
-It is observed that reverb has the worst callback times of all, which is expected, because of the heavy
+It is observed from \Cref{tab:audio_component_benchmark} that reverb has the worst callback times of all, which is expected, because of the heavy
 computation led by randomization, multi-channel processing, diffusion, etc. And the echo/delay effect has
 the lowest callback time. Which means, reverb cannot be assigned to each of the components individually, but
 rather share a single reverberation system with multiple tracks.
@@ -71,21 +70,22 @@ execution times, ignoring any reverbs at that stage:
         
 \end{enumerate}
 
-Thread 1 takes the longest amount of time to run compared to other threads, so the other utilities, including
-the reverb mixer and the master mixer has to wait for at least \SI{228.42}{\micro\second}. Then, the reverb
-has to process the audio for about \SI{810.875}{\micro\second}. Therefore, the overall mean execution
-time would be,
+Thread 1 takes the longest amount of time to run compared to other threads, so the path from Thread 1 makes it
+a critical path. So the other utilities, including the reverb mixer and the master mixer has to wait for at 
+least \SI{228.42}{\micro\second}. Then, the reverb has to process the audio for about \SI{810.875}{\micro\second}. 
+Therefore, the overall mean execution time down that critical path would be,
 
 $$
 \bar{t} = 228.42 + 810.875 = 1039.295\,\mu s = 1.039\, \text{ms}\, (< 11.6 \text{ms})
 $$
 
-Which means that the audio engine will work smoothly without any interruptions or artifacts. However,
+Which means that the audio engine will work smoothly without any interruptions or artifacts. Additionally,
 the calculations using the worst-case execution times are already conducted using the same principle as above.
 Therefore, the worst-case execution time is estimated to be \SI{2245.13}{\micro\second}, and will still meet 
-the buffer deadline.
+the buffer deadline. And finally, when the program is run on a single thread, the total mean execution time
+would be \SI{1186.609}{\micro\second}.
 
-Therefore, these estimations provide evidence that the DAW engine has the potential to survive that amount of workload. But the scalability
-can further be extended by adding more tracks to perform the actual stress test, i.e. getting everything to work together inside the audio engine 
+Therefore, these estimations provide evidence that the DAW audio engine has the potential to survive that amount of workload. But the scalability
+can further be extended by adding more tracks to perform the actual stress test, including getting everything to work together inside the audio engine 
 in real time using more than 6 tracks with audio effects. Moreover, the evaluated workload does not require multithreading to meet real-time constraints,
 based on these estimation. However, parallel processing may become beneficial as additional workload-heavy instruments, effects, or plugins are introduced.

@@ -1,1 +1,381 @@
 % TODO: Make a glossary
+% All \newacronym and \newglossaryentry definitions live here
+
+
+% Computer Resources =============================================
+\newglossaryentry{daw}
+{
+    name={DAW},
+    description={Digital Audio Workstation; software used for recording, editing, processing, and producing digital audio}
+}
+
+\newglossaryentry{io}
+{
+    name={I/O},
+    plural={I/Os},
+    description={Input/Output; the communication between a computer 
+    system and external devices or software components}
+}
+
+\newglossaryentry{cpu}
+{
+    name={CPU},
+    description={Central Processing Unit; the primary processor responsible for executing program instructions}
+}
+
+\newglossaryentry{ram}
+{
+    name={RAM},
+    description={Random Access Memory; volatile memory used to store data and program state during execution}
+}
+
+\newglossaryentry{api}
+{
+    name={API},
+    description={Application Programming Interface; a set of rules and functions that allows software components to communicate with one another}
+}
+
+\newglossaryentry{uml}
+{
+    name={UML},
+    description={Unified Modeling Language; a standardized visual modeling language used to represent the 
+    structure, behavior, and relationships of software systems through diagrams such as class diagrams 
+    and sequence diagrams}
+}
+
+\newglossaryentry{dao}
+{
+    name={DAO},
+    description={Data Access Object; a software design pattern that separates data storage and 
+    retrieval operations from the application logic by providing an abstraction layer for 
+    accessing data}
+}
+
+% Audio sampling and DSP ==============================================
+\newglossaryentry{adc}
+{
+    name={ADC},
+    description={Analog-to-Digital Converter; a device that converts a continuous analog
+    signal into a discrete digital representation by sampling and
+    quantizing its amplitude}
+}
+
+\newglossaryentry{dac}
+{
+    name={DAC},
+    description={Digital-to-Analog Converter; a device that converts a discrete digital
+    signal back into a continuous analog signal by reconstructing the
+    waveform from quantized amplitude values}
+}
+
+\newglossaryentry{dsp}
+{
+    name={DSP},
+    description={Digital Signal Processing; the use of digital processing to analyze, modify, and 
+    synthesize signals, such as sound, by converting them into a digital format for 
+    mathematical manipulation.}
+}
+
+
+\newglossaryentry{artifact}
+{
+    name={Artifact},
+    description={Undesirable noises that occur during the recording, editing, or manipulation of audio}
+}
+
+\newglossaryentry{iir}
+{
+    name={IIR},
+    description={Infinite Impulse Response; a digital filter where the impulse response does not 
+    settle to zero but continues indefinitely}
+}
+
+\newglossaryentry{fir}
+{
+    name={FIR},
+    description={Finite Impulse Response; a digital filter whose impulse response settles to zero after a certain amount of time}
+}
+
+\newglossaryentry{fft}
+{
+    name={FFT},
+    description={Fast Fourier Transform; an efficient algorithm for computing the discrete Fourier transform}
+}
+
+\newglossaryentry{sf2}
+{
+    name={SF2},
+    description={SoundFont 2; a file format for sample-based virtual instruments}
+}
+
+\newglossaryentry{wav}
+{
+    name={WAV},
+    description={Waveform Audio File Format; a standard file format for storing uncompressed digital audio}
+}
+
+\newglossaryentry{riff}
+{
+    name={RIFF},
+    description={Resource Interchange File Format; a container format used to store multimedia data, including WAV audio files in tagged chunks}
+}
+
+% Musical instruments ============================================
+\newglossaryentry{sfz}{
+    name={SFZ},
+    description={an open, plain-text file format for defining
+    sample-based instruments}
+}
+
+\newglossaryentry{fluidsynth}{
+    name={FluidSynth},
+    description={free open source software synthesizer which converts MIDI 
+    note data into an audio signal using SoundFont technology without the need 
+    for a SoundFont-compatible soundcard}
+}
+
+\newglossaryentry{synthesizer}
+{
+    name={Synthesizer},
+    description={An electronic instrument or software system that generates audio signals using 
+    oscillators/pre-recorded wavetables, filters, envelopes, and modulation sources to create sounds}
+}
+
+\newglossaryentry{oscillator}
+{
+    name={Oscillator},
+    description={A signal generator that produces a periodic waveform, such as a sine, 
+    square, triangle, or sawtooth wave, used as a fundamental sound source for synthesizers}
+}
+
+\newglossaryentry{unison}
+{
+    name={Unison},
+    description={a technique where multiple voices or oscillators play the same note 
+    simultaneously, often with slight variations in pitch, timing, or phase, known 
+    for creating a thicker, wider, and more powerful sound}
+}
+
+\newglossaryentry{fourieranalysis}
+{
+    name={Fourier Analysis},
+    description={A mathematical technique that decomposes a signal into a set of sinusoidal 
+    components with different frequencies, amplitudes, and phases}
+}
+
+% =================================================================
+\newglossaryentry{samplerate}
+{
+    name={Sample Rate},
+    description={The number of samples taken from a continuous audio signal per second 
+    during analog-to-digital conversion, measured in Hertz}
+}
+
+\newglossaryentry{midi}
+{
+    name={MIDI},
+    description={Musical Instrument Digital Interface; a technical standard that allows electronic
+    musical instruments, computers, and other devices to communicate with each other}
+}
+
+
+\newglossaryentry{midimessage}
+{
+    name={MIDI Message},
+    description={A data packet defined by the MIDI protocol that communicates musical information, 
+    such as note activation, note release, controller changes, and other performance parameters 
+    between MIDI devices or software components}
+}
+
+\newglossaryentry{midichannel}
+{
+    name={MIDI Channel},
+    description={A logical communication channel within the MIDI protocol that allows multiple 
+    independent instruments or tracks to share a single MIDI connection, with up to 16 channels 
+    available per MIDI port}
+}
+
+\newglossaryentry{midievent}
+{
+    name={MIDI Event},
+    description={A specific action or message in the MIDI protocol which the MIDI device sends/receives
+        in order to perform a task, depending on the details like the note number and velocity}
+}
+
+\newglossaryentry{bpm}
+{
+    name={BPM},
+    description={Beats Per Minute; a unit used to specify the tempo of music}
+}
+
+
+\newglossaryentry{cent}
+{
+    name={Cent},
+    description={A logarithmic unit of musical pitch interval where one semitone 
+    is divided into 100 cents, and 1200 cents correspond to one octave}
+}
+
+
+\newglossaryentry{adsr}
+{
+    name={ADSR},
+    description={Attack, Decay, Sustain, Release; the four stages of an envelope used to control the amplitude or other 
+    parameters of a sound as long as the key in the MIDI controller is pressed}
+}
+
+\newglossaryentry{lfo}
+{
+    name={LFO},
+    description={Low-Frequency Oscillator; an oscillator operating below the audible frequency range, 
+    typically used to modulate synthesizers and effects, creating rhythmic pulses}
+}
+
+% =========== FILTER ==================
+\newglossaryentry{filter}{
+    name={Filter},
+    description={frequency-dependent system that can amplify, pass, or attenuate 
+    specific frequency ranges within the audio frequency range of 0 Hz to 20 kHz}
+}
+
+\newglossaryentry{biquad}{
+    name={Biquad Filter},
+    description={A recursive second-order digital filter used to implement various filter types
+    efficiently}
+}
+
+\newglossaryentry{lpf}
+{
+    name={LPF},
+    description={Low-Pass Filter; system that allows signals with a frequency lower 
+    than a certain cutoff frequency to pass through while attenuating signals 
+    with frequencies higher than that cutoff}
+}
+
+
+\newglossaryentry{hpf}
+{
+    name={HPF},
+    description={High-Pass Filter; system that allows signals with a frequency higher 
+than a certain cutoff frequency to pass through while attenuating signals 
+with frequencies lower than that cutoff}
+}
+
+
+\newglossaryentry{bpf}
+{
+    name={BPF},
+    description={Band-Pass Filter; system that passes frequencies within a certain 
+range and attenuates frequencies outside that range}
+}
+
+
+\newglossaryentry{peaking}{
+    name={Peaking Filter},
+    description={A filter that boosts or cuts a band of frequencies
+    centered on a cutoff frequency, with the effect tapering off
+    on either side, controlled by a Q factor}
+}
+
+\newglossaryentry{shelf}{
+    name={Shelf Filter},
+    description={A filter that boosts or cuts all frequencies above
+    (high-shelf) or below (low-shelf) a chosen cutoff frequency by
+    a constant amount, leaving the rest of the spectrum unaffected}
+}
+
+\newglossaryentry{notch}{
+    name={Notch Filter},
+    description={A narrow-band filter that introduces a sharp attenuation within a
+    specific frequency while leaving surrounding frequencies largely
+    unaffected}
+}
+
+\newglossaryentry{svf}
+{
+    name={SVF},
+    description={State-Variable Filter; a filter structure capable of simultaneously producing 
+    low-pass, high-pass, band-pass, and other filter responses, ideal for real-time frequency sweeps}
+}
+
+
+\newglossaryentry{zdf}
+{
+    name={ZDF},
+    description={Zero-Delay Feedback; a digital filter design technique that eliminates 
+    the one-sample delay normally introduced in feedback loops, commonly using algebra}
+}
+
+\newglossaryentry{rms}
+{
+    name={RMS},
+    description={Root Mean Square; a statistical measure commonly used to represent the 
+    effective amplitude or power of an signal or wave}
+}
+
+\newglossaryentry{rt60}
+{
+    name={RT60},
+    description={Reverberation Time; the duration it takes for sound to decay by 60 decibels 
+    in a space after the sound source has stopped}
+}
+
+\newglossaryentry{gain}
+{
+    name={Gain},
+    description={The amount of amplification or attenuation applied to an audio signal, typically expressed as a linear factor or in decibels}
+}
+
+
+\newglossaryentry{compression}
+{
+    name={Compression},
+    description={An audio processing technique that reduces the dynamic range of a signal by attenuating portions of the signal that exceed a specified threshold}
+}
+
+% ========= Reverb ======================
+\newglossaryentry{fdn}
+{
+    name={FDN},
+    description={Feedback Delay Network; a reverberation structure consisting of multiple 
+    interconnected delay lines with feedback}
+}
+
+\newglossaryentry{diffusion}
+{
+    name={Diffusion},
+    description={the scattering of sound waves in many directions to 
+    reduce echoes and make the sound feel more natural and spacious 
+    in a room}
+}
+
+\newglossaryentry{delay}
+{
+    name={Delay},
+    description={An audio effect or signal processing technique that introduces a time lag between the input signal and the output, commonly used to create echoes and spatial effects}
+}
+
+% =============== Threading ========================
+\newglossaryentry{dag}
+{
+    name={DAG},
+    description={Directed Acyclic Graph; a graph of nodes connected by directed
+        edges containing no cycles, commonly used to represent a
+        processing or signal-flow chain with a defined execution
+        order}
+}
+
+
+\newglossaryentry{criticalpath}
+{
+    name={Critical Path},
+    description={The longest path through the DAG, representing the sequence of tasks 
+    that determines the maximum processing time}
+}
+
+\newglossaryentry{raii}
+{
+    name={RAII},
+    description={A programming idiom in C++ where resources are acquired during 
+    object creation and automatically released when the object goes out of scope}
+}

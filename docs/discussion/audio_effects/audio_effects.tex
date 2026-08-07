@@ -5,7 +5,7 @@ adding depth and character to the sound. Each effect is dependent on the audio s
 being sent, whether directly or from another audio effect. Therefore, they must execute
 on the same thread as the audio input, without breaching real-time constraints or any CPU overhead. 
 \Cref{fig:audio_fx_pipeline} shows an example of a placement of the audio effects system within this real-time signal path, 
-depending on the audio effects the producer has added (\cref{prompt:audio_fx_block_diag}).
+depending on the audio effects the producer has added (\cref{prompt:audio_fx_block_diag}) \cite{anthropicclaude}.
 
 % TODO: Add description for each audio sample here
 \input{discussion/eq_filter/figures/audio_fx_arch.tex}

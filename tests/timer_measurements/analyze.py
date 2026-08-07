@@ -76,7 +76,7 @@ thread3 = {
     "Track 6": ["sfz", "rbj", "compressor"]
 }
 
-key = "max"
+key = "mean"
 
 thread1_time = sum([sum([analyze(components[comp])[key] for comp in ls]) for ls in thread1.values()])
 thread2_time = sum([sum([analyze(components[comp])[key] for comp in ls]) for ls in thread2.values()])
@@ -93,6 +93,8 @@ for track, selected in thread1.items():
 print("Total: ", allTotal)
 
 print("Overall:", allTotal + analyze(components["reverb"])[key])
+
+print("Single thread result", thread1_time+thread2_time+thread3_time+analyze(components["reverb"])[key])
 # print("Thread 1:", " + ".join([analyze(components[comp])[key] for comp in ls]), thread1_time)
 # print("Thread 2:", thread2_time)
 # print("Thread 3:", thread3_time)

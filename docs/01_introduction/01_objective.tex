@@ -1,0 +1,29 @@
+\subsection{Objectives}
+
+Since a CPU and a memory are finite resources, it comes with a crucial engineering problem. Every resources (threads, memory locations, etc.) 
+need to be utilized as much as possible. Any interruptions or CPU usage will introduce perceptible artifacts in the audio
+engine, or have some of the MIDI events to go out of sync. Even threads sharing a resource have chances of causing
+resource contention.
+
+The primary objective is to build a standalone DAW application using C++, and optimize the performance of the audio engine as much as possible. 
+and must meet the following criteria, including the implementation of a custom synthesizer to produce waveforms conforming 
+to amplitude and frequency specifications from the literature. It also needs to meet the following criteria:
+\begin{itemize}
+    \item Purely software-based; cannot use microcontrollers or any external hardware except for MIDI Controller, audio interface, etc.
+    \item Must meet all the real-time constraints, described in Section \ref{sec:comp_req}
+    \item Must complete execution within the buffer time, described in Section \ref{sec:comp_req}
+    \item Maintains CPU economy below around 25\%
+    \item Aims to maintain a memory footprint not more than 512 MB (\Cref{prompt:cpu_memory_criteria}) \cite{anthropicclaude}
+    \item Must be able to run on a standard consumer-level hardware without any interruption
+    \item Maintain synchronization using thread management techniques 
+\end{itemize}
+
+Many popular DAWs, such as Logic Pro X, Reaper, FL Studio, etc. only require reasonable amount of hardware for the program to 
+run efficiently. 
+\Cref{tab:daw_hardware_requirements} shows a comparison between different DAWs with their designated 
+hardware requirements \cite{integraudio_cpu_efficient_daws}.
+
+\input{01_introduction/tables/hardware_requirements.tex}
+
+This means that there is a possibility of having a DAW to run on a consumer-level hardware which is powerful enough,
+if and only if the DAW is maintained and all the resources are utilized effectively.

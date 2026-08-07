@@ -1,0 +1,23 @@
+\section*{Executive Summary}
+
+This project reflects the ongoing development of the Digital Audio Workstation (DAW),
+and it's built with C++, inspired by many popular DAWs like FL Studio, as well as
+General MIDI. The goal of this project is to utilize a multi-threaded architecture that allows a group of
+tracks to play in parallel with the other threads before being sent to the Master audio
+effects and a mixer, optimizing perceptual audio quality while maintaining real-time constraints and synchronous timing under 
+continuous workload.
+
+The tracks include musical instruments equipped with Fluidsynth and Sfizz API,
+allowing support for SoundFonts (SF2) stashed in Musical Artifacts, as well as SFZ, which are relatively
+inexpensive to run and maintain. It currently has support for oscillator-based synthesizer with unison, which has
+can offer a variety of sounds in fields of electronic music. Various IIR-based audio effects, such as
+Biquad filters, State Variable Filters (SVF), Reverberation, compressor are also implemented for maintaining
+professional sound quality, and are heavily based on Infinite Impulse Response (IIR) mechanism.
+
+The test cases include perceptual listening, signal analysis, and real-time performance evaluation. 
+All the Bode Plots and time-domain plots demonstrated the expected behaviour of the audio effects implemented. 
+The development of the project, however, is currently underway, and is only limited to testing specified components.
+So the theoretical estimation based on the multi-threaded DAG architecture are calculated, after 
+measuring the time for each component. This still provided evidences that the mean and worst-case execution time
+are well below the buffer time frame, even though it does not represent the actual stress test of a complete DAW 
+operating with a full live production session, which will be done in the future.

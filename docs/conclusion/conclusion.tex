@@ -1,0 +1,34 @@
+\section{Conclusion}
+
+This project presented the underlying development of the prototype of
+a modular digital audio workstation, implemented in C++, and is
+currently under process as of publishing this report. The experimental
+results using theoretical estimation indicate that all these implemented
+audio components should potentially satisfy the real-time processing 
+requirements. The mockup DAW session achieved a 
+mean execution time of \SI{1039.295}{\micro\second} and a worst-case 
+execution time of \SI{2245.130}{\micro\second}, remaining well below 
+the \SI{11.61}{\milli\second} processing deadline for a 512 floating-point
+sample audio buffer at a sampling rate of 44.1 kHz. These findings indicate 
+that the current implementation is potentially capable of real-time audio processing.
+Moreover, the total execution time of \SI{1186.609}{\micro\second} using a single thread
+also indicates that it does not require rigourous multi-threading with just the small amount
+of tracks, i.e., 6 tracks.
+
+Beyond benchmark results, these implementations are also evaluated through
+perceptual listening tests and signal analysis. All the Bode Plots and time-domain 
+plots demonstrated the expected behaviour of the audio effects implemented, while
+testing them individually. These effects are proven to show consistency with the 
+expected results, which includes filtering, dynamic compression, reverb, etc. However, unison
+synthesizer exhibited some audible beating effect caused by different frequencies 
+between voices of the same amplitude, requiring some level of improvement.
+
+These conclusions are currently limited to the estimations with specified components
+and a mockup of a DAW session with a dummy list of instruments and audio effects only. And 
+since the project is still under development, 
+the measured performance does not represent the actual stress test of a complete DAW 
+operating with a full live production session containing additional tracks, routing, 
+automation, and user interaction. Further evaluation will be required as more 
+functionalities are integrated into the system.
+
+\input{conclusion/recommendations.tex}

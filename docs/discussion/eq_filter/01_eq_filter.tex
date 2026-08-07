@@ -2,13 +2,9 @@
 \label{sec:eq_filter}
 
 Every equalizers require a filtering mechanism which must not only produce the expected audio signal,
-but to be real-time friendly during the processing of each sample. Some alternative approaches, such as Finite Impulse Response 
-(FIR) \cite{SteveWinder2002C1} filtering 
-exist for equalization (\cref{prompt:biquad_alternatives}) \cite{anthropicclaude}. It is not chosen as a solution 
-due to high computational cost and/or latency, beccause FIR requires fewer delay elements, adders, and multipliers
-\cite{SteveWinder2002C1}. Therefore, IIR (Infinite Impulse Response) digital filter is pursued. The first digital 
-filter implemented in the audio engine is the Biquad Filter, which is a second-order Infinite Impulse Response (IIR) 
-filter \cite{smith_biquad}. 
+but to be real-time friendly during the processing of each sample. The first digital 
+filter implemented in the audio engine is the Robert Bristow-Johnson (RBJ) Biquad Filter, which is one of these second-order 
+Infinite Impulse Response (IIR) filter \cite{smith_biquad}. 
 
 The filter design is based on the biquadratic filter \cite{vanWaterschootT.2007APPT} 
 using the Robert Bristow-Johnson (RBJ) method \cite{cookbook} to calculate

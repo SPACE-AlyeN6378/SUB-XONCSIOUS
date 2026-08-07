@@ -15,11 +15,11 @@ consumed by the audio engine. This is described by the following equation below 
 The processing time satisfies the deadline requirements, if and only if $C < t_{\text{buffer}}$ or $U < 1$.
 Otherwise, it will lead to glitches (observed through clicks and pops) and some unwanted artifacts.
 
-Design a real-time friendly audio engine with DSP, it must maintain real-time constraints, which includes
+To design a real-time friendly audio engine with DSP, it must maintain real-time constraints, which includes
 avoiding any function calls that takes a longer period of time to execute. These might include the following \cite{portaudio}:
 \begin{itemize}
     \item Memory allocation/deallocation
-    \item I/O (e.g. \texttt{printf()}, \texttt{std::cin}, etc.)
+    \item I/O operations (e.g. \texttt{printf()}, \texttt{std::cin}, etc.)
     \item Context switching (e.g. \texttt{exec()}, or \texttt{yield()})
     \item Any mutex operations
     \item Any tasks related to the operating system

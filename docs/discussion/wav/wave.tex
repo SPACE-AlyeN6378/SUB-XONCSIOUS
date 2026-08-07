@@ -5,7 +5,7 @@ to extract a data type compatible with the real-time audio engine,
 without introducing any unwanted latency.
 
 The WAV files (\texttt{*.wav}) are basically wave files in RIFF format,
-and uses the simplest approach, i.e. extracting samples using \texttt{libsndfile} 
+and uses the simplest approach, i.e. extracting samples using the \texttt{libsndfile} \cite{libsndfile}
 library built into Linux, and then storing them to a \texttt{std::vector}. If the 
 sampling rate of the extracted audio does not match the engine's sample rate, 
 the algorithm either downsamples it when it's too high, or upsamples it when it's too low,

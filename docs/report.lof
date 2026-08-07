@@ -1,0 +1,20 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces Software Architecture of the DAW with Thread and Track Management}}{3}{figure.1}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Quantization of the continuous time signal to discrete time signals}}{5}{figure.2}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Signal flow during the latency period}}{7}{figure.3}%
+\contentsline {figure}{\numberline {4}{\ignorespaces UML Diagram describing the relationships between components of the track}}{10}{figure.4}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Pipeline of Audio Effects allocated to a single thread}}{11}{figure.5}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Measured frequency Response from the RBJ Biquad Filter using Peaking EQ}}{13}{figure.6}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Architecture of the minimalistic design of the architecture}}{13}{figure.7}%
+\contentsline {figure}{\numberline {8}{\ignorespaces N-order Feedback-Delay Network equipped with a series of IIR Feedback Comb Filters}}{16}{figure.8}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Impulse Response of the Stem Plot}}{17}{figure.9}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Impulse Response of the RMS Envelope Curve in dB}}{17}{figure.10}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Flowchart illustrating the algorithm behind compression}}{18}{figure.11}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Plot showing the effect of compression on the input signal with gain reduction applied}}{20}{figure.12}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Plot showing the effect of compression on the input signal as in \Cref {fig:compressor_plot} with an attack time of 200 ms}}{21}{figure.13}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Sine waveform displayed in the time domain}}{22}{figure.14}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Frequency spectra of a sine wave showing a single harmonic peak}}{22}{figure.15}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Side-by-side comparison between the frequency spectrum, measured (left) and theoretical (right)}}{23}{figure.16}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Basic State-Variable Filter Schematic}}{27}{figure.17}%
+\contentsline {figure}{\numberline {18}{\ignorespaces TPT State Variable Filter Topology}}{27}{figure.18}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Measured frequency Response from the State Variable Filter using different variations}}{29}{figure.19}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Arbitrary Example of a DAW Session Showing the Arrangement of Tracks}}{31}{figure.20}%
